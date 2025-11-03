@@ -1,0 +1,38 @@
+{
+    "name": "response-interop/interface",
+    "type": "library",
+    "description": "",
+    "keywords": [],
+    "license": "MIT",
+    "homepage": "https://github.com/response-interop/interface",
+    "authors": [
+        {
+            "name": "Paul M. Jones",
+            "email": "pmjones@pmjones.io",
+            "homepage": "https://pmjones.io",
+            "role": "Lead"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4" : {
+            "ResponseInterop\\Interface\\": "src/"
+        }
+    },
+    "require-dev": {
+        "pds/composer-script-names": "^1.0",
+        "pds/skeleton": "^1.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload-dev": {
+        "psr-4" : {
+            "ResponseInterop\\Interface\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyze": "./vendor/bin/phpstan",
+        "check": "composer analyze"
+    }
+}
