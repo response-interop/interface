@@ -508,7 +508,7 @@ Notes:
 None of the researched projects model their response objects as immutable or
 readonly.
 
-### Why is _ResponseStruct_ not indentical to a client-side response interface?
+### Why is _ResponseStruct_ not identical to a client-side response interface?
 
 None of the researched projects model their response objects that way.
 
