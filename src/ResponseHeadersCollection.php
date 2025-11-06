@@ -51,7 +51,8 @@ interface ResponseHeadersCollection
      *
      * If the normalized `$field` is `set-cookie`, implementations MUST retain
      * the `$value` such that the cookie can be retrieved by name (e.g. via
-     * `getCookieAsArray()` or `getCookieAsString()`).
+     * `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
+     * retained in such a way, implementations MUST throw a _ResponseThrowable_.
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -71,7 +72,8 @@ interface ResponseHeadersCollection
      *
      * If the normalized `$field` is `set-cookie`, implementations MUST retain
      * the `$value` such that can be retrieved by name (e.g. via
-     * `getCookieAsArray()` or `getCookieAsString()`).
+     * `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
+     * retained in such a way, implementations MUST throw a _ResponseThrowable_.
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value

@@ -146,7 +146,8 @@ Notes:
       header.
     - If the normalized `$field` is `set-cookie`, implementations MUST retain
       the `$value` such that the cookie can be retrieved by name (e.g. via
-      `getCookieAsArray()` or `getCookieAsString()`).
+      `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
+      retained in such a way, implementations MUST throw a _ResponseThrowable_.
 
 - ```php
   public function addHeader(
@@ -163,7 +164,8 @@ Notes:
       previous `$value`s.
     - If the normalized `$field` is `set-cookie`, implementations MUST retain
       the `$value` such that the cookie can be retrieved by name (e.g. via
-      `getCookieAsArray()` or `getCookieAsString()`).
+      `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
+      retained in such a way, implementations MUST throw a _ResponseThrowable_.
 
 - ```php
   public function hasHeader(response_header_field_string $field) : bool
