@@ -83,7 +83,7 @@ interface ResponseCookieHelperService
      *       appropriately.
      *
      *     - Implementations SHOULD use lower case for attribute names but MAY use any
-     *       other case approved in the relvant RFCs.
+     *       other case approved in the relevant RFCs.
      *
      *     - Implementations MUST omit `=<attribute-value>` when the attribute value
      *       is boolean `true`.
