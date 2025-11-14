@@ -15,7 +15,7 @@ namespace ResponseInterop\Interface;
  *   generated from an array, object, file, stream, or some other source. Many
  *   of these sources might best be converted only as the response is being
  *   sent; for example, when sending a file to download, it may be wise to
- *   send the file in chunks instead ofreading the whole file into memory.
+ *   send the file in chunks instead of reading the whole file into memory.
  *
  * - **Setting and getting content is implementation-specific.** Because of the
  *   varied, domain-specific, and sometimes proprietary requirements of
