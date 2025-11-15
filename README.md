@@ -684,13 +684,13 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyContent_]: #response-body-content
-[_ResponseCookieHelperService_]: #response-cookie-helper-service
-[_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseStatusLineStruct_]: #response-status-line-struct
-[_ResponseStruct_]: #response-struct
-[_ResponseThrowable_]: #response-throwable
-[_ResponseTypeAliases_]: #response-type-aliases
+[_ResponseBodyContent_]: #responsebodycontent
+[_ResponseCookieHelperService_]: #responsecookiehelperservice
+[_ResponseHeadersCollection_]: #responseheaderscollection
+[_ResponseStatusLineStruct_]: #responsestatuslinestruct
+[_ResponseStruct_]: #responsestruct
+[_ResponseThrowable_]: #responsethrowable
+[_ResponseTypeAliases_]: #responsetypealiases
 [_Throwable_]: https://php.net/Throwable
 [`header()`]: https://php.net/header
 [`header_register_callback()`]: https://php.net/header_register_callback
