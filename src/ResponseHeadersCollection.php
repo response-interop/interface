@@ -26,9 +26,10 @@ namespace ResponseInterop\Interface;
  *     - **Header fields are retained in lower case.** This standardizes
  *       expectations around header field lookups.
  *
- *     - **Header fields must be valid.** In general, this means the
- *       header field must match the regular expression
- *       `/^:?[a-z][a-z0-9-]+$/`.
+ *     - **Header fields must be valid.** In general, this means header fields
+ *       should consist only of letters, digits, hyphens (`-`), and underscores
+ *       (`_`); the first character should be a letter or an underscore. Cf.
+ *       <https://datatracker.ietf.org/doc/html/rfc3864#section-4.1>.
  *
  *     - **Header values cannot be blank.** If `trim($value) === ''` then
  *       the `$value` is blank.

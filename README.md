@@ -148,9 +148,14 @@ the response, including affordances for cookie management.
     - **Header fields are retained in lower case.** This standardizes
       expectations around header field lookups.
 
-    - **Header fields must be valid.** In general, this means the
-      header field must match the regular expression
-      `/^:?[a-z][a-z0-9-]+$/`.
+    - **Header fields must be valid.** In general, this means header fields
+      should consist only of letters, digits, hyphens (`-`), and underscores
+      (`_`); the first character should be a letter or an underscore. (HTTP/2
+      also defines a `:status` header field, which begins with a colon.)
+
+      References:
+          - <https://datatracker.ietf.org/doc/html/rfc3864#section-4.1>
+          - <https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2.4>
 
     - **Header values cannot be blank.** If `trim($value) === ''` then
       the `$value` is blank.
