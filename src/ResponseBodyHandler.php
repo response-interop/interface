@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * The _ResponseBodyContent_ interface affords management and sending of
+ * The _ResponseBodyHandler_ interface affords management and sending of
  * non-string, resource-intensive, or response-modifying content.
  *
  * - Notes:
@@ -23,7 +23,7 @@ namespace ResponseInterop\Interface;
  *       here. Implementors are encouraged to publish their implementations for
  *       shared use.
  */
-interface ResponseBodyContent
+interface ResponseBodyHandler
 {
     /**
      * Modifies the `$response` as appropriate for the body content.

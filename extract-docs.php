@@ -7,7 +7,7 @@ $files = [
     __DIR__ . "/src/ResponseStruct.php",
     __DIR__ . "/src/ResponseStatusLineStruct.php",
     __DIR__ . "/src/ResponseHeadersCollection.php",
-    __DIR__ . "/src/ResponseBodyContent.php",
+    __DIR__ . "/src/ResponseBodyHandler.php",
     __DIR__ . "/src/ResponseThrowable.php",
     __DIR__ . "/src/ResponseTypeAliases.php",
 ];
@@ -87,7 +87,7 @@ $docs = strtr(
         "_ResponseStruct_" => "[_ResponseStruct_][]",
         "_ResponseStatusLineStruct_" => "[_ResponseStatusLineStruct_][]",
         "_ResponseHeadersCollection_" => "[_ResponseHeadersCollection_][]",
-        "_ResponseBodyContent_" => "[_ResponseBodyContent_][]",
+        "_ResponseBodyHandler_" => "[_ResponseBodyHandler_][]",
         "_ResponseThrowable_" => "[_ResponseThrowable_][]",
         "_ResponseTypeAliases_" => "[_ResponseTypeAliases_][]",
     ],

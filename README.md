@@ -23,7 +23,7 @@ This package defines the following interfaces:
 - [_ResponseHeadersCollection_][] encapsulates the headers for the response,
   including affordances for cookie management.
 
-- [_ResponseBodyContent_][] affords management of non-string,
+- [_ResponseBodyHandler_][] affords management of non-string,
   resource-intensive, or response-modifying content.
 
 - [_ResponseCookieHelperService_][] affords conversion of cookie representations
@@ -62,7 +62,7 @@ The [_ResponseStruct_][] interface encapsulates the server response.
         - The headers for the response, including affordances for cookie management.
 
     - ```php
-      public Stringable|ResponseBodyContent|string $body { get; set; }
+      public Stringable|ResponseBodyHandler|string $body { get; set; }
       ```
         - The body for the response.
 
@@ -72,7 +72,7 @@ The [_ResponseStruct_][] interface encapsulates the server response.
               content source.** The single most common kind of body content is an
               in-memory string. However, there are other common kinds of content,
               such as when sending a large file for download, at which point a
-              [_ResponseBodyContent_][] instance affords improved resource management
+              [_ResponseBodyHandler_][] instance affords improved resource management
               and response modification.
 
 - Methods:
@@ -84,7 +84,7 @@ The [_ResponseStruct_][] interface encapsulates the server response.
 
         - Directives:
 
-            - If the `$body` is an instance of [_ResponseBodyContent_][], implementations
+            - If the `$body` is an instance of [_ResponseBodyHandler_][], implementations
               MUST call its `prepareResponse()` method before sending anything.
             - Implementations MAY check to see if the response can be sent; when doing
               so, implementations MUST throw a [_ResponseThrowable_][] if the response
@@ -393,9 +393,9 @@ the response, including affordances for cookie management.
             - Implementations SHOULD send header fields in lower case, but MAY
               send header fields in some other RFC-approved case.
 
-### [_ResponseBodyContent_][]
+### [_ResponseBodyHandler_][]
 
-The [_ResponseBodyContent_][] interface affords management and sending of
+The [_ResponseBodyHandler_][] interface affords management and sending of
 non-string, resource-intensive, or response-modifying content.
 
 - Notes:
@@ -696,7 +696,7 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyContent_]: #response-body-content
+[_ResponseBodyHandler_]: #response-body-content
 [_ResponseCookieHelperService_]: #response-cookie-helper-service
 [_ResponseHeadersCollection_]: #response-headers-collection
 [_ResponseStatusLineStruct_]: #response-status-line-struct

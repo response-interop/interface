@@ -29,17 +29,17 @@ interface ResponseStruct
      *       content source.** The single most common kind of body content is an
      *       in-memory string. However, there are other common kinds of content,
      *       such as when sending a large file for download, at which point a
-     *       _ResponseBodyContent_ instance affords improved resource management
+     *       _ResponseBodyHandler_ instance affords improved resource management
      *       and response modification.
      */
-    public string|Stringable|ResponseBodyContent $body { get; set; }
+    public string|Stringable|ResponseBodyHandler $body { get; set; }
 
     /**
      * Sends the response.
      *
      * - Directives:
      *
-     *     - If the `$body` is an instance of _ResponseBodyContent_, implementations
+     *     - If the `$body` is an instance of _ResponseBodyHandler_, implementations
      *       MUST call its `prepareResponse()` method before sending anything.
      *     - Implementations MAY check to see if the response can be sent; when doing
      *       so, implementations MUST throw a _ResponseThrowable_ if the response

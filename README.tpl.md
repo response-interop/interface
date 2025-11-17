@@ -23,7 +23,7 @@ This package defines the following interfaces:
 - [_ResponseHeadersCollection_][] encapsulates the headers for the response,
   including affordances for cookie management.
 
-- [_ResponseBodyContent_][] affords management of non-string,
+- [_ResponseBodyHandler_][] affords management of non-string,
   resource-intensive, or response-modifying content.
 
 - [_ResponseCookieHelperService_][] affords conversion of cookie representations
@@ -282,7 +282,7 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyContent_]: #response-body-content
+[_ResponseBodyHandler_]: #response-body-content
 [_ResponseCookieHelperService_]: #response-cookie-helper-service
 [_ResponseHeadersCollection_]: #response-headers-collection
 [_ResponseStatusLineStruct_]: #response-status-line-struct
