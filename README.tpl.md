@@ -1,0 +1,299 @@
+# Response-Interop Interface Package
+
+This package provides interoperable interfaces to encapsulate, buffer, and send
+server-side response values in PHP 8.4 or later, in order to reduce the global
+mutable state and inspection problems that exist with the PHP response-sending
+functions. It reflects, resolves, and refines the common practices of over a
+dozen different userland projects.
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [BCP 14][] ([RFC 2119][], [RFC 8174][]).
+
+## Interfaces
+
+This package defines the following interfaces:
+
+- [_ResponseStruct_][] encapsulates the server response status line, headers,
+  and body.
+
+- [_ResponseStatusLineStruct_][] encapsulates status line for the response,
+  including the HTTP version and the status code.
+
+- [_ResponseHeadersCollection_][] encapsulates the headers for the response,
+  including affordances for cookie management.
+
+- [_ResponseBodyContent_][] affords management of non-string,
+  resource-intensive, or response-modifying content.
+
+- [_ResponseCookieHelperService_][] affords conversion of cookie representations
+  to and from strings and arrays.
+
+Response-Interop also defines a marker interface, [_ResponseThrowable_][], for
+marking an [_Exception_][] as response-related.
+
+Finally, Response-Interop defines a [_ResponseTypeAliases_][] interface with
+PHPStan types to aid static analysis.
+
+Notes:
+
+- **Response-Interop interfaces are mutable.** None of the researched projects
+  afforded readonly or immutable response objects.
+
+- **Whereas PHP sends-as-it-goes, Response-Interop collects-then-sends.**
+  For example, the PHP sends a header at the moment the [`header()`][] function
+  is called. In contrast, Response-Interop buffers the header specifications,
+  and sends them only when the `sendResponse()` method is called.
+
+{{= docs }}
+
+- ```
+  response_cookie_array array{
+      name: response_cookie_name_string,
+      value: response_cookie_value_string,
+      attributes: response_cookie_attributes_array
+  }
+  ```
+    - An `array` of cookie components.
+
+- ```
+  response_cookie_attributes_array array{
+      expires?:string,
+      max-age?:numeric-string,
+      path?:string,
+      domain?:string,
+      secure?:true,
+      httponly?:true,
+      samesite?:string,
+      partitioned?:true,
+  }
+  ```
+    - An `array` intended to specify cookie attributes.
+
+- `response_cookie_name_string`
+    - A `string` intended as a cookie name.
+
+- `response_cookie_value_string`
+    - A `string` intended as a cookie value.
+
+- `response_header_field_string`
+    - A `string` intended to be a header field name, typically as part of the
+      first argument to [`header()`][].
+
+- `response_header_value_string`
+    - A `string` intended to be header value, typically as part of the first
+      argument to [`header()`][].
+
+- `response_http_version_string`
+    - A `string` used for specifying an HTTP version.
+
+- `response_status_code_int`
+    - An `int` specifying an HTTP response code.
+
+## Implementations
+
+Implementations MAY define additional class members not defined in these
+interfaces.
+
+Notes:
+
+- **Reference implementations** may be found at <https://github.com/response-interop/impl>.
+
+## Q & A
+
+### Why are there only mutable (as vs. immutable or readonly) interfaces?
+
+None of the researched projects model their response objects as immutable or
+readonly.
+
+### Why is _ResponseStruct_ not identical to a client-side response interface?
+
+None of the researched projects model their response objects that way.
+
+A more general answer is from Fowler in _Patterns of Enterprise Application Architecture_
+(2003, p 21):
+
+> ... I think there is a good distinction to be made between an interface that
+> you provide as a service to others and your use of someone else's service.
+> ... I find it beneficial to think about these differently because the
+> difference in clients alters the way you think about the service.
+
+Response-Interop attempts to model an interface that *provides* a response for
+presentation, not one that *uses* a response from an external source.
+
+### Why does _ResponseStruct_ not provide constants for status codes?
+
+Of the 13 researched projects:
+
+- 2 provide a constant or Enum for reason-phrase mappings to status codes; and,
+- 2 others provide a static array of status codes mappings to reason phrases.
+
+The relative rarity, and inconsistency, of such constants and mappings makes it
+difficult to discern a standard here.
+
+Implementors desiring status codes constants or Enums are not prevented from
+providing them with their implementations.
+
+### Why does _ResponseStruct_ not have a property for the reason phrase?
+
+6 of the 13 projects allow for a reason phrase in one way or another. Thus,
+while not the majority design choice, allowing for a reason phrase warrants
+consideration.
+
+On further inspection, the projects that allow for a reason phrase sometimes set
+it with the status code, and sometimes set it separately. This makes it
+difficult to resolve the differences between the projects. Given that the HTTP
+specifications indicate reason phrases are optional, Response-Interop does not
+attempt to resolve those differences.
+
+Implementors desiring a reason phrase are encouraged to add one approriate for
+the status code, perhaps in their `sendResponse()` logic.
+
+### Why not put the _ResponseHeadersCollection_ methods directly on the _ResponseStruct_?
+
+Research revealed that separate header and/or cookie collections are used in 6
+of the 13 projects. Thus, while not the majority design choice, delegating these
+methods to a separate object is common enough to warrant consideration.
+
+With that in mind, Response-Interop finds that the segregation of status line,
+headers, and body into their own properties appropriately separates the concerns
+around building a response.
+
+### Why does _ResponseHeadersCollection_ allow `string` but not _Stringable_ `$value` types?
+
+None of the researched projects do so. Further, doing so adds complexity to the
+implemetation directives on how to retain such values, as well to the return
+typehints on the various getter methods. Avoiding _Stringable_ therefore reduces
+the implementation burden.
+
+If consumers need to pass a _Stringable_, they may cast it to `(string)` at
+call-time.
+
+### Why does _ResponseHeadersCollection_ return individual headers *either* as `string` *or* as `array`?
+
+Although some response headers may hold multiple values, the main use-case for
+most response headers is to hold a single value.
+
+Consider an example case of the `location` header. If one wants to check that
+the `location` is `/foo`, the always-array idiom looks like the following:
+
+```php
+$location = $response->headers->getHeader('location') ?? [];
+
+if (
+    count($location) === 1
+    && reset($location) === '/foo'
+) {
+    // location is /foo
+};
+```
+
+That is, the consumer cannot be guaranteed that the `location` exists at all
+as an array, nor that is has only one value if it does, nor that the only array
+key is `0`.
+
+What about an always-string idiom? If there were multiple values, they would
+have to be concatenated in a comma-separated string (which might not even be a
+valid format for the header in question). In turn, that makes it difficult to
+iterate over the values without first parsing the returned string into an array,
+which is burdensome for consumers.
+
+In contrast, the string-or-array idiom looks like this for single-valued
+headers:
+
+```php
+$location = $response->headers->getHeader('location');
+
+if ($location === '/foo') {
+    // location is /foo
+}
+```
+
+With this idiom, if `location` has been specified multiple times, the
+identicality check is guaranteed to fail (as it should).
+
+Multiple-valued headers are returned as an array of strings, making it trivial
+to iterate over them.
+
+Finally, if consumers must allow for multiple values, even when only a single
+value might be present, it is easy to cast the `getHeader()` return to an
+`(array)` as needed:
+
+```php
+$xFooValues = $response->headers->getHeader('x-foo') ?? [];
+
+foreach ((array) $xFooValues as $xFooValue) {
+    // ...
+}
+```
+
+With all that in mind, Response-Interop favors of the string-or-array approach.
+
+### Why does _ResponseHeadersCollection_ provide no methods for managing header callbacks?
+
+PHP provides a [`header_register_callback()`][] function to execute callbacks
+when headers are sent. None the researched projects provided any equivalent
+affordances.
+
+Implementors desiring something similar are encouraged to add such logic as
+necessary, perhaps in the `sendResponseHeaders()` logic.
+
+### Why does _ResponseHeadersCollection_ provide cookie affordance methods?
+
+All of the researched projects provide some sort of affordance for cookie
+management. Indeed, PHP itself has a [`setcookie()`][] function separate from
+the more general [`header()`][] function.
+
+In terms of interface design, the `set-cookie` values are more complex than most
+response headers. That difference makes appropriate typehinting more difficult
+on methods designed for *both* general headers *and* `set-cookie` headers.
+
+Further, it is useful to be able to find or replace a cookie by its name, and
+general-purpose header methods cannot accomplish that.
+
+### Why does _ResponseHeadersCollection_ not provide other affordance methods?
+
+The researched projects included other affordances around specific headers and
+behaviors.  For example, many of them afford a `redirect()` mechanism to set
+the status code and `location` header at the same time. Others provide
+affordances around caching-related headers such as `etag`, `vary`, the
+`cache-control` directives, and so on.
+
+However, the choice of affordances and their different implementations varied
+too widely to discern any common approaches. As such, Response-Interop does
+not specify affordances for other behaviors.
+
+## Appendix: Relevant PHP Functions
+
+- Status line
+    - http://php.net/http_response_code
+
+- Headers
+    - http://php.net/header
+    - http://php.net/header_register_callback
+    - http://php.net/header_remove
+    - http://php.net/headers_list
+    - http://php.net/headers_sent
+
+- Cookies
+    - http://php.net/setcookie
+    - http://php.net/setrawcookie
+
+* * *
+
+[_Exception_]: https://php.net/Throwable
+[_ResponseBodyContent_]: #response-body-content
+[_ResponseCookieHelperService_]: #response-cookie-helper-service
+[_ResponseHeadersCollection_]: #response-headers-collection
+[_ResponseStatusLineStruct_]: #response-status-line-struct
+[_ResponseStruct_]: #response-struct
+[_ResponseThrowable_]: #response-throwable
+[_ResponseTypeAliases_]: #response-type-aliases
+[_Throwable_]: https://php.net/Throwable
+[`header()`]: https://php.net/header
+[`header_register_callback()`]: https://php.net/header_register_callback
+[`setcookie()`]: https://php.net/setcookie
+[BCP 14]: https://www.rfc-editor.org/info/bcp14
+[RFC 2119]: https://www.rfc-editor.org/rfc/rfc2119.txt
+[RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265
+[RFC 8174]: https://www.rfc-editor.org/rfc/rfc8174.txt

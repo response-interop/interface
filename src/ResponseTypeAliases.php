@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
+ * The _ResponseTypeAliases_ interface defines these PHPStan type aliases to
+ * aid static analysis.
+ *
  * @phpstan-type response_cookie_array array{
  *     name: response_cookie_name_string,
  *     value: response_header_value_string,
