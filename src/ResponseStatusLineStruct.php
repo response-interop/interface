@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * Encapsulates the status line for the server response.
+ * The _ResponseStatusLineStruct_ interface encapsulates the status line
+ * for the server response.
  *
  * @phpstan-import-type response_http_version_string from ResponseTypeAliases
  *
@@ -15,8 +16,10 @@ interface ResponseStatusLineStruct
     /**
      * The HTTP version string for the response; e.g. `'1.1'`.
      *
-     * Implementations MAY validate this value; implementations doing so MUST
-     * throw a _ResponseThrowable_ on invalidity.
+     * - Directives:
+     *
+     *     - Implementations MAY validate this value; implementations doing
+     *       so MUST throw a _ResponseThrowable_ on invalidity.
      *
      * @var response_http_version_string
      */
@@ -25,8 +28,10 @@ interface ResponseStatusLineStruct
     /**
      * The status code for the response; e.g. `200`.
      *
-     * Implementations MAY validate this value; implementations doing so MUST
-     * throw a _ResponseThrowable_ on invalidity.
+     * - Directives:
+     *
+     *     - Implementations MAY validate this value; implementations doing
+     *       so MUST throw a _ResponseThrowable_ on invalidity.
      *
      * @var response_status_code_int
      */

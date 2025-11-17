@@ -4,31 +4,34 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * Encapsulates the headers for the response, including affordances for cookie
- * management.
+ * The _ResponseHeadersCollection_ interface encapsulates the headers for
+ * the response, including affordances for cookie management.
  *
- * Implementations MUST normalize each `response_header_field_string` argument
- * to lower case.
+ * - Directives:
  *
- * Implementations MUST validate each `response_header_field_string` argument,
- * and MUST throw a _ResponseThrowable_ on invalidity.
+ *     - Implementations MUST normalize each `response_header_field_string`
+ *       argument to lower case.
  *
- * Implementations MUST throw a _ResponseThrowable_ if a
- * `response_header_value_string` argument is blank.
+ *     - Implementations MUST validate each `response_header_field_string`
+ *       argument, and MUST throw a _ResponseThrowable_ on invalidity.
  *
- * Implementations MAY validate other method arguments; when doing so,
- * implementations MUST throw a _ResponseThrowable_ on invalidity.
+ *     - Implementations MUST throw a _ResponseThrowable_ if a
+ *       `response_header_value_string` argument is blank.
  *
- * Notes:
+ *     - Implementations MAY validate other method arguments; when doing
+ *       so, implementations MUST throw a _ResponseThrowable_ on invalidity.
  *
- * - **Header fields are retained in lower case.** This standardizes
- *   expectations around header field lookups.
+ * - Notes:
  *
- * - **Header fields must be valid.** In general, this means the header field
- *   must match the regular expression `/^:?[a-z][a-z0-9-]+$/`.
+ *     - **Header fields are retained in lower case.** This standardizes
+ *       expectations around header field lookups.
  *
- * - **Header values cannot be blank.** If `trim($value) === ''` then the
- *   `$value` is blank.
+ *     - **Header fields must be valid.** In general, this means the
+ *       header field must match the regular expression
+ *       `/^:?[a-z][a-z0-9-]+$/`.
+ *
+ *     - **Header values cannot be blank.** If `trim($value) === ''` then
+ *       the `$value` is blank.
  *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
  *
@@ -46,13 +49,16 @@ namespace ResponseInterop\Interface;
 interface ResponseHeadersCollection
 {
     /**
-     * Sets the `$value` for a header, replacing all existing `$value`s for that
-     * header.
+     * Sets the `$value` for a header, replacing all existing `$value`s for
+     * that header.
      *
-     * If the normalized `$field` is `set-cookie`, implementations MUST retain
-     * the `$value` such that the cookie can be retrieved by name (e.g. via
-     * `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
-     * retained in such a way, implementations MUST throw a _ResponseThrowable_.
+     * - Directives:
+     *
+     *     - If the normalized `$field` is `set-cookie`, implementations MUST
+     *       retain the `$value` such that the cookie can be retrieved by
+     *       name (e.g. via `getCookieAsArray()` or `getCookieAsString()`);
+     *       if the cookie cannot be retained in such a way, implementations
+     *       MUST throw a _ResponseThrowable_.
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -63,17 +69,20 @@ interface ResponseHeadersCollection
      * Adds a `$value` for a header, keeping all previous `$value`s for that
      * header.
      *
-     * If there are no existing `$value`s for the header, implementations
-     * MUST behave as if `setHeader()` was called with the same `$field` and
-     * `$value`.
+     * - Directives:
      *
-     * Implementations MUST retain each added `$value` separately from all
-     * previous `$value`s.
+     *     - If there are no existing `$value`s for the header,
+     *       implementations MUST behave as if `setHeader()` was called with
+     *       the same `$field` and `$value`.
      *
-     * If the normalized `$field` is `set-cookie`, implementations MUST retain
-     * the `$value` such that can be retrieved by name (e.g. via
-     * `getCookieAsArray()` or `getCookieAsString()`); if the cookie cannot be
-     * retained in such a way, implementations MUST throw a _ResponseThrowable_.
+     *     - Implementations MUST retain each added `$value` separately from
+     *       all previous `$value`s.
+     *
+     *     - If the normalized `$field` is `set-cookie`, implementations MUST
+     *       retain the `$value` such that can be retrieved by name (e.g. via
+     *       `getCookieAsArray()` or `getCookieAsString()`); if the cookie
+     *       cannot be retained in such a way, implementations MUST throw a
+     *       _ResponseThrowable_.
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -90,30 +99,33 @@ interface ResponseHeadersCollection
     /**
      * Returns the `$value`(s) for a header.
      *
-     * Implementations MUST return `null` if there is no `$value` for the
-     * header.
+     * - Directives:
      *
-     * Implementations MUST use a string if there is only one `$value` for
-     * the header.
+     *     - Implementations MUST return `null` if there is no `$value` for
+     *       the header.
      *
-     * Implementations MUST use an array of strings if there is more than one
-     * `$value` for the header.
+     *     - Implementations MUST use a string if there is only one `$value`
+     *       for the header.
      *
-     * Notes:
+     *     - Implementations MUST use an array of strings if there is more
+     *       than one `$value` for the header.
      *
-     * - **This method returns a string if there is only one value.** This is
-     *   to support the most common  case for most response headers; i.e., a single value.
-     *   This reduces the occurrence of the idiom `getHeader('field-name')[0]`.
-     *   If consumers require the return to be an array regardless of the number
-     *   of values, they may cast the return to `(array)`.
+     * - Notes:
      *
-     * - **Cookies are always returned as strings.** This is to keep the return
-     *   types consistent for all headers, such that the returned values can be
-     *   used directly in `header()` calls if needed. In practical terms, the
-     *   implementation should use `getCookiesAsStrings()` as the source for
-     *   `set-cookie` values.
+     *     - **This method returns a string if there is only one value.**
+     *       This is to support the most common  case for most response
+     *       headers; i.e., a single value. This reduces the occurrence of
+     *       the idiom `getHeader('field-name')[0]`. If consumers require the
+     *       return to be an array regardless of the number of values, they
+     *       may cast the return to `(array)`.
      *
-     * @return null|response_header_value_string|array<response_header_value_string>
+     *     - **Cookies are always returned as strings.** This is to keep the
+     *       return types consistent for all headers, such that the returned
+     *       values can be used directly in `header()` calls if needed. In
+     *       practical terms, the implementation should use
+     *       `getCookiesAsStrings()` as the source for `set-cookie` values.
+     *
+     * @return null|response_header_value_string|response_header_value_string[]
      */
     public function getHeader(string $field) : null|string|array;
 
@@ -130,27 +142,26 @@ interface ResponseHeadersCollection
     public function hasHeaders() : bool;
 
     /**
-     * Returns an array of all `$value`s of all headers, keyed by the header
-     * field.
+     * Returns an array of all `$value`s of all headers, keyed by the
+     * header field.
      *
-     * Implementations MUST use a string if there is only one `$value` for a
-     * header.
+     * - Directives:
      *
-     * Implementations MUST use an array of strings if there is more than one
-     * `$value` for a header.
+     *     - Implementations MUST use a string if there is only one `$value`
+     *       for a header.
      *
-     * Notes:
+     *     - Implementations MUST use an array of strings if there is more
+     *       than one `$value` for a header.
      *
-     * - **Cookies are always returned as strings.** This is to keep the return
-     *   types consistent for all headers, such that the returned values can be
-     *   used directly in `header()` calls if needed. In practical terms, the
-     *   implementation should use `getCookiesAsStrings()` as the source for
-     *   `set-cookie` values.
+     * - Notes:
      *
-     * @return array<
-     *     response_header_field_string,
-     *     response_header_value_string|array<response_header_value_string>
-     * >
+     *     - **Cookies are always returned as strings.** This is to keep the
+     *       return types consistent for all headers, such that the returned
+     *       values can be used directly in `header()` calls if needed. In
+     *       practical terms, the implementation should use
+     *       `getCookiesAsStrings()` as the source for `set-cookie` values.
+     *
+     * @return array<response_header_field_string,response_header_value_string|response_header_value_string[]>
      */
     public function getHeaders() : array;
 
@@ -163,11 +174,13 @@ interface ResponseHeadersCollection
      * Sets a named cookie as a `response_cookie_array`, replacing any
      * existing cookie of the same name.
      *
-     * Implementations MUST retain the cookie such that it can be
-     * retrieved by name (e.g. via `getCookieAsArray()` or
-     * `getCookieAsString()`).
+     * - Directives:
      *
-     * Implementations MUST NOT encode the arguments.
+     *     - Implementations MUST retain the cookie such that it can be
+     *       retrieved by name (e.g. via `getCookieAsArray()` or
+     *       `getCookieAsString()`).
+     *
+     *     - Implementations MUST NOT encode the arguments.
      *
      * @param response_cookie_name_string $name
      * @param response_cookie_value_string $value
@@ -187,12 +200,15 @@ interface ResponseHeadersCollection
     public function hasCookie(string $name) : bool;
 
     /**
-     * Returns a named cookie as a `response_cookie_array`, or `null` if it does
-     * not exist.
+     * Returns a named cookie as a `response_cookie_array`, or `null` if it
+     * does not exist.
      *
-     * Implementations retaining the cookie as a `response_header_value_string`
-     * MUST convert it to a `response_cookie_array` via the
-     * _ResponseCookieHelperService_ method `parseResponseCookieString()`.
+     * - Directives:
+     *
+     *     - Implementations retaining the cookie as a
+     *       `response_header_value_string` MUST convert it to a
+     *       `response_cookie_array` via the _ResponseCookieHelperService_
+     *       method `parseResponseCookieString()`.
      *
      * @param response_cookie_name_string $name
      * @return ?response_cookie_array
@@ -200,12 +216,16 @@ interface ResponseHeadersCollection
     public function getCookieAsArray(string $name) : ?array;
 
     /**
-     * Returns a named cookie as a string suitable for use as a header value, or
-     * or `null` if it does not exist.
+     * Returns a named cookie as a string suitable for use as a header
+     * value, or or `null` if it does not exist.
      *
-     * Implementations retaining the cookie as a `response_cookie_array`
-     * MUST convert it to a `response_header_value_string` via the
-     * _ResponseCookieHelperService_ method `composeResponseCookieString()`.
+     * - Directives:
+     *
+     *     - Implementations retaining the cookie as a
+     *       `response_cookie_array` MUST convert it to a
+     *       `response_header_value_string` via the
+     *       _ResponseCookieHelperService_ method
+     *       `composeResponseCookieString()`.
      *
      * @param response_cookie_name_string $name
      * @return ?response_header_value_string
@@ -215,11 +235,11 @@ interface ResponseHeadersCollection
     /**
      * Removes a named cookie.
      *
-     * Notes:
+     * - Notes:
      *
-     * - **This is not the same as deleting a cookie from the browser.** To do
-     *   that, consumers need to send a named cookie with an expiration date
-     *   in the past.
+     *     - **This is not the same as deleting a cookie from the browser.**
+     *       To do that, consumers need to send a named cookie with an
+     *       expiration date in the past.
      *
      * @param response_cookie_name_string $name
      */
@@ -231,24 +251,28 @@ interface ResponseHeadersCollection
     public function hasCookies() : bool;
 
     /**
-     * Returns all cookies as an array where each key is the cookie name and
-     * each value is its `response_cookie_array`.
+     * Returns all cookies as an array where each key is the cookie name
+     * and each value is its `response_cookie_array`.
      *
-     * Implementations retaining a cookie as a `response_header_value_string`
-     * MUST represent that cookie as if it had been retrieved via the
-     * `getCookieAsArray()` method.
+     * - Directives:
+     *
+     *    - Implementations retaining a cookie as a
+     *      `response_header_value_string` MUST represent that cookie as if
+     *      it had been retrieved via the `getCookieAsArray()` method.
      *
      * @return array<response_cookie_name_string,response_cookie_array>
      */
     public function getCookiesAsArrays() : array;
 
     /**
-     * Returns all cookies as an array where each key is the cookie name and
-     * each value is its `response_header_value_string`.
+     * Returns all cookies as an array where each key is the cookie name
+     * and each value is its `response_header_value_string`.
      *
-     * Implementations retaining a cookie as a `response_cookie_array` MUST
-     * represent that cookie as if it had been retrieved via the
-     * `getCookieAsString()` method.
+     * - Directives:
+     *
+     *     - Implementations retaining a cookie as a `response_cookie_array`
+     *       MUST represent that cookie as if it had been retrieved via the
+     *       `getCookieAsString()` method.
      *
      * @return array<response_cookie_name_string,response_header_value_string>
      */
@@ -257,19 +281,21 @@ interface ResponseHeadersCollection
     /**
      * Removes the `set-cookie` header entirely.
      *
-     * Notes:
+     * - Notes:
      *
-     * - **This is not the same as deleting all cookies from the browser.** To
-     *   do that, consumers need to send named cookies with expiration dates in
-     *   the past.
+     *     - **This is not the same as deleting all cookies from the
+     *       browser.** To do that, consumers need to send named cookies with
+     *       expiration dates in the past.
      */
     public function unsetCookies() : void;
 
     /**
      * Sends all headers.
      *
-     * Implementations SHOULD send header fields in lower case, but MAY send
-     * header fields in some other RFC-approved case.
+     * - Directives:
+     *
+     *     - Implementations SHOULD send header fields in lower case, but MAY
+     *       send header fields in some other RFC-approved case.
      */
     public function sendResponseHeaders() : void;
 }
