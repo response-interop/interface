@@ -74,20 +74,22 @@ interface ResponseCookieHelperService
     /**
      * Composes a `response_cookie_array` into a `response_header_value_string`.
      *
-     * Implementations MUST NOT encode the cookie name, value, or attributes.
+     * - Directives:
      *
-     * Implementations SHOULD use lower case for attribute names but MAY use any
-     * other case approved in the relvant RFCs.
+     *     - Implementations MUST NOT encode the cookie name, value, or attributes.
      *
-     * Implementations MUST omit `=<attribute-value>` when the attribute value
-     * is boolean `true`.
+     *     - Implementations SHOULD use lower case for attribute names but MAY use any
+     *       other case approved in the relvant RFCs.
      *
-     * Notes:
+     *     - Implementations MUST omit `=<attribute-value>` when the attribute value
+     *       is boolean `true`.
      *
-     * - **These directives are specific but non-restrictive.** For example,
-     *   cookie attributes other than the ones found in RFC 6265 may be
-     *   composed into the `response_header_value_string`, such as `SameSite`
-     *   and `Partitioned`.
+     * - Notes:
+     *
+     *     - **These directives are specific but non-restrictive.** For example,
+     *       cookie attributes other than the ones found in RFC 6265 may be
+     *       composed into the `response_header_value_string`, such as `SameSite`
+     *       and `Partitioned`.
      *
      * @param response_cookie_array $cookie
      * @return response_header_value_string
