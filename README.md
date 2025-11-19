@@ -634,6 +634,37 @@ Notes:
 None of the researched projects model their response objects as immutable or
 readonly.
 
+### Why is it a _Response*Struct*_ and not just a _Response_ ?
+
+Response-Interop wants to avoid _Interface_ suffixes, and wants to avoid making
+implementors use import aliases. Calling it a _Response_ would mean any
+implementation also called _Response_ would have to alias the interop interface.
+It is the difference between this less-preferable alternative ...
+
+```php
+use ResponseInterop\Interface\Response as ResponseInteropInterface;
+
+class Response implements ResponseInteropInterface
+{
+    // ...
+}
+```
+
+... and this more-preferable one:
+
+```php
+use ResponseInterop\Interface\ResponseStruct;
+
+class Response implements ResponseStruct
+{
+    // ...
+}
+```
+
+Further, the _Response_ definition is struct-like in that it is composed almost entirely of properties.
+
+It is true that none of the researched implementations use _Struct_ in their naming; but then, the interop is for the interface, so existing implementation names can remain as they are.
+
 ### Why is _ResponseStruct_ not identical to a client-side response interface?
 
 None of the researched projects model their response objects that way.
