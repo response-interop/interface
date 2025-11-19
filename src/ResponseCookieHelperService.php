@@ -37,8 +37,8 @@ interface ResponseCookieHelperService
      *     - Implementations MUST return `null` when the parsed `<name-value-pair>`
      *       lacks a `%x3D` (`=`) character, or when the parsed cookie name is empty.
      *
-     *     - Implementations MUST NOT decode the parsed cookie name, value, or
-     *       attributes.
+     *     - Implementations MUST decode the parsed cookie name and value
+     *       appropriately.
      *
      *     - Implementations MUST normalize parsed attribute names to lower case.
      *
@@ -51,6 +51,9 @@ interface ResponseCookieHelperService
      *       cookie attributes other than the ones found in RFC 6265 may be parsed
      *       and captured into the `response_cookie_array`, such as `SameSite` and
      *       `Partitioned`.
+     *
+     *     - **The parsed cookie name and value are to be decoded.** Typically
+     *       this means using `urldecode()`.
      *
      *     - **Some attributes do not have values.** For example, the `HttpOnly`
      *       attribute is defined as having no accompanying value (i.e., it has no
@@ -76,7 +79,8 @@ interface ResponseCookieHelperService
      *
      * - Directives:
      *
-     *     - Implementations MUST NOT encode the cookie name, value, or attributes.
+     *     - Implementations MUST encode the cookie name and value
+     *       appropriately.
      *
      *     - Implementations SHOULD use lower case for attribute names but MAY use any
      *       other case approved in the relvant RFCs.
@@ -90,6 +94,9 @@ interface ResponseCookieHelperService
      *       cookie attributes other than the ones found in RFC 6265 may be
      *       composed into the `response_header_value_string`, such as `SameSite`
      *       and `Partitioned`.
+     *
+     *     - **The parsed cookie name and value are to be encoded.** Typically
+     *       this means using `urlencode()`.
      *
      * @param response_cookie_array $cookie
      * @return response_header_value_string
