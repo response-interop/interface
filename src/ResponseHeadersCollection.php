@@ -289,14 +289,4 @@ interface ResponseHeadersCollection
      *       expiration dates in the past.
      */
     public function unsetCookies() : void;
-
-    /**
-     * Sends all headers.
-     *
-     * - Directives:
-     *
-     *     - Implementations SHOULD send header fields in lower case, but MAY
-     *       send header fields in some other RFC-approved case.
-     */
-    public function sendResponseHeaders() : void;
 }

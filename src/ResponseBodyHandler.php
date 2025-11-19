@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace ResponseInterop\Interface;
 
+use StreamInterop\Interface\ResourceStream;
+
 /**
  * The _ResponseBodyHandler_ interface affords management and sending of
  * non-string, resource-intensive, or response-modifying content.
@@ -47,7 +49,12 @@ interface ResponseBodyHandler
     public function prepareResponse(ResponseStruct $response) : void;
 
     /**
-     * Sends the body content.
+     * Sends the body content to an output stream.
+     *
+     * - Directives:
+     *
+     *     - Implementations MUST write the `$response->body` to the
+     *       `$stream`.
      *
      * - Notes:
      *
@@ -55,6 +62,12 @@ interface ResponseBodyHandler
      *       kinds of content require different sending mechanisms. Some kinds may
      *       be amenable to a simple `echo`, others may require specific encoding,
      *       and yet others may require more involved resource or stream handling.
+     *
+     *     - **Use a stream resource, not `echo`, to send the body.**
+     *       Although echoing a body string is the single most common
+     *       use case, writing to the `php://output` stream does
+     *       exactly the same thing. This also allows specifying the
+     *       output stream at call-time, such as when testing.
      */
-    public function sendResponseBody() : void;
+    public function sendResponseBody(ResourceStream $stream) : void;
 }

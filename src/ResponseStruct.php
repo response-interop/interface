@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ResponseInterop\Interface;
 
+use StreamInterop\Interface\ResourceStream;
 use Stringable;
 
 /**
@@ -11,9 +12,28 @@ use Stringable;
 interface ResponseStruct
 {
     /**
-     * The status line for the response.
+     * The HTTP version string for the response; e.g. `'1.1'`.
+     *
+     * - Directives:
+     *
+     *     - Implementations MAY validate this value; implementations doing
+     *       so MUST throw a _ResponseThrowable_ on invalidity.
+     *
+     * @var response_http_version_string
      */
-    public ResponseStatusLineStruct $statusLine { get; set; }
+    public string $httpVersion { get; set; }
+
+    /**
+     * The status code for the response; e.g. `200`.
+     *
+     * - Directives:
+     *
+     *     - Implementations MAY validate this value; implementations doing
+     *       so MUST throw a _ResponseThrowable_ on invalidity.
+     *
+     * @var response_status_code_int
+     */
+    public int $statusCode { get; set; }
 
     /**
      * The headers for the response, including affordances for cookie management.
@@ -39,11 +59,29 @@ interface ResponseStruct
      *
      * - Directives:
      *
-     *     - If the `$body` is an instance of _ResponseBodyHandler_, implementations
-     *       MUST call its `prepareResponse()` method before sending anything.
-     *     - Implementations MAY check to see if the response can be sent; when doing
-     *       so, implementations MUST throw a _ResponseThrowable_ if the response
-     *       cannot be sent.
+     *     - Implementations MAY check to see if the response can be
+     *       sent; when doing so, implementations MUST throw a
+     *       _ResponseThrowable_ if the response cannot be sent.
+     *
+     *     - If the `$body` is an instance of _ResponseBodyHandler_,
+     *       implementations MUST call its `prepareResponse()` method before
+     *       sending anything.
+     *
+     *     - Implementations SHOULD use `header()` to send headers, but
+     *       MAY use some other mechanism.
+     *
+     *     - Implementations SHOULD send header fields in lower case,
+     *       but MAY send header fields in some other RFC-approved case.
+     *
+     *     - Implementations MUST write the `$body` to the `$stream`.
+     *
+     * - Notes:
+     *
+     *     - **Use a stream resource, not `echo`, to send the body.**
+     *       Although echoing a body string is the single most common
+     *       use case, writing to the `php://output` stream does
+     *       exactly the same thing. This also allows specifying the
+     *       output stream at call-time, such as when testing.
      */
-    public function sendResponse() : void;
+    public function sendResponse(ResourceStream $stream) : void;
 }
