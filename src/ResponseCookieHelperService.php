@@ -13,7 +13,7 @@ namespace ResponseInterop\Interface;
  * - as a `response_cookie_array`, for working with `set-cookie` components
  *   more conveniently.
  *
- * The _ResponseCookieHelperService_ affords conversion between the two
+ * The [_ResponseCookieHelperService_][] affords conversion between the two
  * representations.
  *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
@@ -26,10 +26,10 @@ interface ResponseCookieHelperService
      *
      * - Directives:
      *     - Implementations MUST use a parsing algorithm equivalent to the one in
-     *       RFC 6265 section 5.2.
+     *       [RFC 6265][] section 5.2.
      *
      *     - Implementations MAY ignore the attribute-specific parsing and validating
-     *       algorithms in RFC 6265 sections 5.2.1 et al.
+     *       algorithms in [RFC 6265][] sections 5.2.1 et al.
      *
      *     - Implementations MAY validate parsed attributes; implementations doing so
      *       MUST treat invalid attributes as missing.
@@ -48,12 +48,12 @@ interface ResponseCookieHelperService
      * - Notes:
      *
      *     - **These directives are specific but non-restrictive.** For example,
-     *       cookie attributes other than the ones found in RFC 6265 may be parsed
+     *       cookie attributes other than the ones found in [RFC 6265][] may be parsed
      *       and captured into the `response_cookie_array`, such as `SameSite` and
      *       `Partitioned`.
      *
      *     - **The parsed cookie name and value are to be decoded.** Typically
-     *       this means using `urldecode()`.
+     *       this means using [`urldecode()`][].
      *
      *     - **Some attributes do not have values.** For example, the `HttpOnly`
      *       attribute is defined as having no accompanying value (i.e., it has no
@@ -91,12 +91,12 @@ interface ResponseCookieHelperService
      * - Notes:
      *
      *     - **These directives are specific but non-restrictive.** For example,
-     *       cookie attributes other than the ones found in RFC 6265 may be
+     *       cookie attributes other than the ones found in [RFC 6265][] may be
      *       composed into the `response_header_value_string`, such as `SameSite`
      *       and `Partitioned`.
      *
-     *     - **The parsed cookie name and value are to be encoded.** Typically
-     *       this means using `urlencode()`.
+     *     - **The cookie name and value are to be encoded.** Typically this
+     *       means using [`urlencode()`][].
      *
      * @param response_cookie_array $cookie
      * @return response_header_value_string

@@ -6,7 +6,7 @@ namespace ResponseInterop\Interface;
 use StreamInterop\Interface\ResourceStream;
 
 /**
- * The _ResponseBodyHandler_ interface affords management and sending of
+ * The [_ResponseBodyHandler_][] interface affords management and sending of
  * non-string, resource-intensive, or response-modifying content.
  *
  * - Notes:
@@ -53,14 +53,13 @@ interface ResponseBodyHandler
      *
      * - Directives:
      *
-     *     - Implementations MUST write the `$response->body` to the
-     *       `$stream`.
+     *     - Implementations MUST write the body content to the `$stream`.
      *
      * - Notes:
      *
      *     - **Sending logic is content- and implementation-specific.** Different
      *       kinds of content require different sending mechanisms. Some kinds may
-     *       be amenable to a simple `echo`, others may require specific encoding,
+     *       be amenable to direct output, others may require specific encoding,
      *       and yet others may require more involved resource or stream handling.
      *
      *     - **Use a stream resource, not `echo`, to send the body.**

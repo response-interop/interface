@@ -17,9 +17,6 @@ This package defines the following interfaces:
 - [_ResponseStruct_][] encapsulates the server response status line, headers,
   and body.
 
-- [_ResponseStatusLineStruct_][] encapsulates status line for the response,
-  including the HTTP version and the status code.
-
 - [_ResponseHeadersCollection_][] encapsulates the headers for the response,
   including affordances for cookie management.
 
@@ -45,55 +42,9 @@ Notes:
   is called. In contrast, Response-Interop buffers the header specifications,
   and sends them only when the `sendResponse()` method is called.
 
-### [_ResponseStruct_][]
+### _ResponseStruct_
 
 The [_ResponseStruct_][] interface encapsulates the server response.
-
-- Properties:
-
-    - ```php
-      public ResponseStatusLineStruct $statusLine { get; set; }
-      ```
-        - The status line for the response.
-
-    - ```php
-      public ResponseHeadersCollection $headers { get; set; }
-      ```
-        - The headers for the response, including affordances for cookie management.
-
-    - ```php
-      public Stringable|ResponseBodyHandler|string $body { get; set; }
-      ```
-        - The body for the response.
-
-        - Notes:
-
-            - **The `$body` may be a string, a _Stringable_ object, or some other
-              content source.** The single most common kind of body content is an
-              in-memory string. However, there are other common kinds of content,
-              such as when sending a large file for download, at which point a
-              [_ResponseBodyHandler_][] instance affords improved resource management
-              and response modification.
-
-- Methods:
-
-    - ```php
-      public function sendResponse() : void;
-      ```
-        - Sends the response.
-
-        - Directives:
-
-            - If the `$body` is an instance of [_ResponseBodyHandler_][], implementations
-              MUST call its `prepareResponse()` method before sending anything.
-            - Implementations MAY check to see if the response can be sent; when doing
-              so, implementations MUST throw a [_ResponseThrowable_][] if the response
-              cannot be sent.
-
-### [_ResponseStatusLineStruct_][]
-
-The [_ResponseStatusLineStruct_][] interface encapsulates the status line
-for the server response.
 
 - Properties:
 
@@ -117,14 +68,61 @@ for the server response.
             - Implementations MAY validate this value; implementations doing
               so MUST throw a [_ResponseThrowable_][] on invalidity.
 
+    - ```php
+      public ResponseHeadersCollection $headers { get; set; }
+      ```
+        - The headers for the response, including affordances for cookie management.
+
+    - ```php
+      public Stringable|ResponseBodyHandler|string $body { get; set; }
+      ```
+        - The body for the response.
+
+        - Notes:
+
+            - **The `$body` may be a string, a _Stringable_ object, or some other
+              content source.** The single most common kind of body content is an
+              in-memory string. However, there are other common kinds of content,
+              such as when sending a large file for download, at which point a
+              [_ResponseBodyHandler_][] instance affords improved resource management
+              and response modification.
+
 - Methods:
 
     - ```php
-      public function sendResponseStatusLine() : void;
+      public function sendResponse(
+          StreamInterop\Interface\ResourceStream $stream,
+      ) : void;
       ```
-        - Sends the response status line.
+        - Sends the response.
 
-### [_ResponseHeadersCollection_][]
+        - Directives:
+
+            - Implementations MAY check to see if the response can be
+              sent; when doing so, implementations MUST throw a
+              [_ResponseThrowable_][] if the response cannot be sent.
+
+            - If the `$body` is an instance of [_ResponseBodyHandler_][],
+              implementations MUST call its `prepareResponse()` method before
+              sending anything.
+
+            - Implementations SHOULD use [`header()`][] to send headers, but
+              MAY use some other mechanism.
+
+            - Implementations SHOULD send header fields in lower case,
+              but MAY send header fields in some other RFC-approved case.
+
+            - Implementations MUST write the `$body` to the `$stream`.
+
+        - Notes:
+
+            - **Use a stream resource, not `echo`, to send the body.**
+              Although echoing a body string is the single most common
+              use case, writing to the `php://output` stream does
+              exactly the same thing. This also allows specifying the
+              output stream at call-time, such as when testing.
+
+### _ResponseHeadersCollection_
 
 The [_ResponseHeadersCollection_][] interface encapsulates the headers for
 the response, including affordances for cookie management.
@@ -150,12 +148,8 @@ the response, including affordances for cookie management.
 
     - **Header fields must be valid.** In general, this means header fields
       should consist only of letters, digits, hyphens (`-`), and underscores
-      (`_`); the first character should be a letter or an underscore. (HTTP/2
-      also defines a `:status` header field, which begins with a colon.)
-
-      References:
-          - <https://datatracker.ietf.org/doc/html/rfc3864#section-4.1>
-          - <https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2.4>
+      (`_`); the first character should be a letter or an underscore. Cf.
+      <https://datatracker.ietf.org/doc/html/rfc3864#section-4.1>.
 
     - **Header values cannot be blank.** If `trim($value) === ''` then
       the `$value` is blank.
@@ -198,7 +192,7 @@ the response, including affordances for cookie management.
               all previous `$value`s.
 
             - If the normalized `$field` is `set-cookie`, implementations MUST
-              retain the `$value` such that can be retrieved by name (e.g. via
+              retain the `$value` such that it can be retrieved by name (e.g. via
               `getCookieAsArray()` or `getCookieAsString()`); if the cookie
               cannot be retained in such a way, implementations MUST throw a
               [_ResponseThrowable_][].
@@ -220,10 +214,10 @@ the response, including affordances for cookie management.
             - Implementations MUST return `null` if there is no `$value` for
               the header.
 
-            - Implementations MUST use a string if there is only one `$value`
+            - Implementations MUST return a string if there is only one `$value`
               for the header.
 
-            - Implementations MUST use an array of strings if there is more
+            - Implementations MUST return an array of strings if there is more
               than one `$value` for the header.
 
         - Notes:
@@ -237,7 +231,7 @@ the response, including affordances for cookie management.
 
             - **Cookies are always returned as strings.** This is to keep the
               return types consistent for all headers, such that the returned
-              values can be used directly in `header()` calls if needed. In
+              values can be used directly in [`header()`][] calls if needed. In
               practical terms, the implementation should use
               `getCookiesAsStrings()` as the source for `set-cookie` values.
 
@@ -252,7 +246,7 @@ the response, including affordances for cookie management.
         - Reports if any headers exist.
 
     - ```php
-      public function getHeaders() : array<response_header_field_string,response_header_value_string|response_header_value_string[]>;
+      public function getHeaders() : response_headers_array;
       ```
         - Returns an array of all `$value`s of all headers, keyed by the
         header field.
@@ -269,7 +263,7 @@ the response, including affordances for cookie management.
 
             - **Cookies are always returned as strings.** This is to keep the
               return types consistent for all headers, such that the returned
-              values can be used directly in `header()` calls if needed. In
+              values can be used directly in [`header()`][] calls if needed. In
               practical terms, the implementation should use
               `getCookiesAsStrings()` as the source for `set-cookie` values.
 
@@ -313,7 +307,7 @@ the response, including affordances for cookie management.
 
             - Implementations retaining the cookie as a
               `response_header_value_string` MUST convert it to a
-              `response_cookie_array` via the _ResponseCookieHelperService_
+              `response_cookie_array` via the [_ResponseCookieHelperService_][]
               method `parseResponseCookieString()`.
 
     - ```php
@@ -329,7 +323,7 @@ the response, including affordances for cookie management.
             - Implementations retaining the cookie as a
               `response_cookie_array` MUST convert it to a
               `response_header_value_string` via the
-              _ResponseCookieHelperService_ method
+              [_ResponseCookieHelperService_][] method
               `composeResponseCookieString()`.
 
     - ```php
@@ -349,7 +343,7 @@ the response, including affordances for cookie management.
         - Reports if any cookies exist.
 
     - ```php
-      public function getCookiesAsArrays() : array<response_cookie_name_string,response_cookie_array>;
+      public function getCookiesAsArrays() : response_named_cookie_arrays;
       ```
         - Returns all cookies as an array where each key is the cookie name
         and each value is its `response_cookie_array`.
@@ -361,7 +355,7 @@ the response, including affordances for cookie management.
              it had been retrieved via the `getCookieAsArray()` method.
 
     - ```php
-      public function getCookiesAsStrings() : array<response_cookie_name_string,response_header_value_string>;
+      public function getCookiesAsStrings() : response_named_cookie_strings;
       ```
         - Returns all cookies as an array where each key is the cookie name
         and each value is its `response_header_value_string`.
@@ -383,17 +377,7 @@ the response, including affordances for cookie management.
               browser.** To do that, consumers need to send named cookies with
               expiration dates in the past.
 
-    - ```php
-      public function sendResponseHeaders() : void;
-      ```
-        - Sends all headers.
-
-        - Directives:
-
-            - Implementations SHOULD send header fields in lower case, but MAY
-              send header fields in some other RFC-approved case.
-
-### [_ResponseBodyHandler_][]
+### _ResponseBodyHandler_
 
 The [_ResponseBodyHandler_][] interface affords management and sending of
 non-string, resource-intensive, or response-modifying content.
@@ -438,28 +422,134 @@ non-string, resource-intensive, or response-modifying content.
               content-specific fashion.
 
     - ```php
-      public function sendResponseBody() : void;
+      public function sendResponseBody(
+          StreamInterop\Interface\ResourceStream $stream,
+      ) : void;
       ```
-        - Sends the body content.
+        - Sends the body content to an output stream.
+
+        - Directives:
+
+            - Implementations MUST write the body content to the `$stream`.
 
         - Notes:
 
             - **Sending logic is content- and implementation-specific.** Different
               kinds of content require different sending mechanisms. Some kinds may
-              be amenable to a simple `echo`, others may require specific encoding,
+              be amenable to direct output, others may require specific encoding,
               and yet others may require more involved resource or stream handling.
 
-### [_ResponseThrowable_][]
+            - **Use a stream resource, not `echo`, to send the body.**
+              Although echoing a body string is the single most common
+              use case, writing to the `php://output` stream does
+              exactly the same thing. This also allows specifying the
+              output stream at call-time, such as when testing.
 
-The [_ResponseThrowable_][] interface extends _Throwable_ to mark an
-_Exception_ as response-related. It adds no class members.
+### _ResponseCookieHelperService_
+
+Response-Interop affords representing `set-cookie` header values in two
+ways:
+
+- as a `response_header_value_string`, for working with complete `set-cookie`
+  header strings; and,
+
+- as a `response_cookie_array`, for working with `set-cookie` components
+  more conveniently.
+
+The [_ResponseCookieHelperService_][] affords conversion between the two
+representations.
 
 - Methods:
 
-### [_ResponseTypeAliases_][]
+    - ```php
+      public function parseResponseCookieString(
+          response_header_value_string $setCookieString,
+      ) : ?response_cookie_array;
+      ```
+        - Parses a `response_header_value_string` into a `response_cookie_array`.
+
+        - Directives:
+            - Implementations MUST use a parsing algorithm equivalent to the one in
+              [RFC 6265][] section 5.2.
+
+            - Implementations MAY ignore the attribute-specific parsing and validating
+              algorithms in [RFC 6265][] sections 5.2.1 et al.
+
+            - Implementations MAY validate parsed attributes; implementations doing so
+              MUST treat invalid attributes as missing.
+
+            - Implementations MUST return `null` when the parsed `<name-value-pair>`
+              lacks a `%x3D` (`=`) character, or when the parsed cookie name is empty.
+
+            - Implementations MUST decode the parsed cookie name and value
+              appropriately.
+
+            - Implementations MUST normalize parsed attribute names to lower case.
+
+            - Implementations MUST represent the value of attributes specified without
+              `=<attribute-value>` as boolean `true`.
+
+        - Notes:
+
+            - **These directives are specific but non-restrictive.** For example,
+              cookie attributes other than the ones found in [RFC 6265][] may be parsed
+              and captured into the `response_cookie_array`, such as `SameSite` and
+              `Partitioned`.
+
+            - **The parsed cookie name and value are to be decoded.** Typically
+              this means using [`urldecode()`][].
+
+            - **Some attributes do not have values.** For example, the `HttpOnly`
+              attribute is defined as having no accompanying value (i.e., it has no
+              `=<attribute-value>` portion). Thus, if `HttpOnly` is present in the
+              `response_header_value_string` as an attribute, its corresponding
+              `response_cookie_array` element must be represented as
+              `['httponly' => true]`. If it is not present as an attribute, it is
+              missing, and thus should not be present in the `response_cookie_array`.
+
+              Note that this is different from an attribute having an empty value.
+              For example, `expires=;` has an empty value, and so should be
+              represented as an empty string: `['expires' => '']`. (This is an
+              invalid value for `expires` and so implementations may treat it as
+              missing.)
+
+    - ```php
+      public function composeResponseCookieString(
+          response_cookie_array $cookie,
+      ) : response_header_value_string;
+      ```
+        - Composes a `response_cookie_array` into a `response_header_value_string`.
+
+        - Directives:
+
+            - Implementations MUST encode the cookie name and value
+              appropriately.
+
+            - Implementations SHOULD use lower case for attribute names but MAY use any
+              other case approved in the relvant RFCs.
+
+            - Implementations MUST omit `=<attribute-value>` when the attribute value
+              is boolean `true`.
+
+        - Notes:
+
+            - **These directives are specific but non-restrictive.** For example,
+              cookie attributes other than the ones found in [RFC 6265][] may be
+              composed into the `response_header_value_string`, such as `SameSite`
+              and `Partitioned`.
+
+            - **The cookie name and value are to be encoded.** Typically this
+              means using [`urlencode()`][].
+
+### _ResponseThrowable_
+
+The [_ResponseThrowable_][] interface extends [_Throwable_][] to mark an
+[_Exception_][] as response-related. It adds no class members.
+
+### _ResponseTypeAliases_
 
 The [_ResponseTypeAliases_][] interface defines these PHPStan type aliases to
-aid static analysis.
+aid static analysis:
 
 - ```
   response_cookie_array array{
@@ -498,8 +588,32 @@ aid static analysis.
     - A `string` intended to be header value, typically as part of the first
       argument to [`header()`][].
 
+- ```
+  response_headers_array array<
+      response_header_field_string,
+      response_header_value_string|response_header_value_string[]
+  >
+  ```
+    - An `array` of header values keyed on the header fields.
+
 - `response_http_version_string`
     - A `string` used for specifying an HTTP version.
+
+- ```
+  response_named_cookie_arrays array<
+      response_cookie_name_string,
+      response_cookie_array
+  >
+  ```
+    - An `array` of cookie component arrays keyed on the cookie name.
+
+- ```
+  response_named_cookie_strings array<
+      response_cookie_name_string,
+      response_header_value_string
+  >
+  ```
+    - An `array` of cookie header strings keyed on the cookie name.
 
 - `response_status_code_int`
     - An `int` specifying an HTTP response code.
@@ -554,8 +668,8 @@ providing them with their implementations.
 while not the majority design choice, allowing for a reason phrase warrants
 consideration.
 
-On further inspection, the projects that allow for a reason phrase sometimes set
-it with the status code, and sometimes set it separately. This makes it
+On further inspection, some of the projects that allow for a reason phrase set
+it with the status code, while others set it separately. This makes it
 difficult to resolve the differences between the projects. Given that the HTTP
 specifications indicate reason phrases are optional, Response-Interop does not
 attempt to resolve those differences.
@@ -569,9 +683,9 @@ Research revealed that separate header and/or cookie collections are used in 6
 of the 13 projects. Thus, while not the majority design choice, delegating these
 methods to a separate object is common enough to warrant consideration.
 
-With that in mind, Response-Interop finds that the segregation of status line,
-headers, and body into their own properties appropriately separates the concerns
-around building a response.
+With that in mind, Response-Interop finds that the segregation of HTTP version,
+status code, headers, and body into their own properties appropriately separates
+the concerns around building a response.
 
 ### Why does _ResponseHeadersCollection_ allow `string` but not _Stringable_ `$value` types?
 
@@ -704,9 +818,11 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases
 [_Throwable_]: https://php.net/Throwable
-[`header()`]: https://php.net/header
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`header()`]: https://php.net/header
 [`setcookie()`]: https://php.net/setcookie
+[`urldecode()`]: https://php.net/urldecode
+[`urlencode()`]: https://php.net/urlencode
 [BCP 14]: https://www.rfc-editor.org/info/bcp14
 [RFC 2119]: https://www.rfc-editor.org/rfc/rfc2119.txt
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265

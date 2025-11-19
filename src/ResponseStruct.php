@@ -7,7 +7,11 @@ use StreamInterop\Interface\ResourceStream;
 use Stringable;
 
 /**
- * The _ResponseStruct_ interface encapsulates the server response.
+ * The [_ResponseStruct_][] interface encapsulates the server response.
+ *
+ * @phpstan-import-type response_http_version_string from ResponseTypeAliases
+ *
+ * @phpstan-import-type response_status_code_int from ResponseTypeAliases
  */
 interface ResponseStruct
 {
@@ -17,7 +21,7 @@ interface ResponseStruct
      * - Directives:
      *
      *     - Implementations MAY validate this value; implementations doing
-     *       so MUST throw a _ResponseThrowable_ on invalidity.
+     *       so MUST throw a [_ResponseThrowable_][] on invalidity.
      *
      * @var response_http_version_string
      */
@@ -29,7 +33,7 @@ interface ResponseStruct
      * - Directives:
      *
      *     - Implementations MAY validate this value; implementations doing
-     *       so MUST throw a _ResponseThrowable_ on invalidity.
+     *       so MUST throw a [_ResponseThrowable_][] on invalidity.
      *
      * @var response_status_code_int
      */
@@ -49,7 +53,7 @@ interface ResponseStruct
      *       content source.** The single most common kind of body content is an
      *       in-memory string. However, there are other common kinds of content,
      *       such as when sending a large file for download, at which point a
-     *       _ResponseBodyHandler_ instance affords improved resource management
+     *       [_ResponseBodyHandler_][] instance affords improved resource management
      *       and response modification.
      */
     public string|Stringable|ResponseBodyHandler $body { get; set; }
@@ -61,13 +65,13 @@ interface ResponseStruct
      *
      *     - Implementations MAY check to see if the response can be
      *       sent; when doing so, implementations MUST throw a
-     *       _ResponseThrowable_ if the response cannot be sent.
+     *       [_ResponseThrowable_][] if the response cannot be sent.
      *
-     *     - If the `$body` is an instance of _ResponseBodyHandler_,
+     *     - If the `$body` is an instance of [_ResponseBodyHandler_][],
      *       implementations MUST call its `prepareResponse()` method before
      *       sending anything.
      *
-     *     - Implementations SHOULD use `header()` to send headers, but
+     *     - Implementations SHOULD use [`header()`][] to send headers, but
      *       MAY use some other mechanism.
      *
      *     - Implementations SHOULD send header fields in lower case,

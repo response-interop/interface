@@ -5,9 +5,9 @@ $docs = [];
 
 $files = [
     __DIR__ . "/src/ResponseStruct.php",
-    __DIR__ . "/src/ResponseStatusLineStruct.php",
     __DIR__ . "/src/ResponseHeadersCollection.php",
     __DIR__ . "/src/ResponseBodyHandler.php",
+    __DIR__ . "/src/ResponseCookieHelperService.php",
     __DIR__ . "/src/ResponseThrowable.php",
     __DIR__ . "/src/ResponseTypeAliases.php",
 ];
@@ -80,19 +80,6 @@ foreach ($files as $file) {
 }
 
 $docs = implode(PHP_EOL, $docs) . PHP_EOL;
-
-$docs = strtr(
-    $docs,
-    [
-        "_ResponseStruct_" => "[_ResponseStruct_][]",
-        "_ResponseStatusLineStruct_" => "[_ResponseStatusLineStruct_][]",
-        "_ResponseHeadersCollection_" => "[_ResponseHeadersCollection_][]",
-        "_ResponseBodyHandler_" => "[_ResponseBodyHandler_][]",
-        "_ResponseThrowable_" => "[_ResponseThrowable_][]",
-        "_ResponseTypeAliases_" => "[_ResponseTypeAliases_][]",
-    ],
-);
-
 $readme = file_get_contents(__DIR__ . '/README.tpl.md');
 $readme = str_replace('{{= docs }}', $docs, $readme);
 $readme = preg_replace('/^\s+$/m', '', $readme);

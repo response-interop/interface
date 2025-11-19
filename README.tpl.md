@@ -17,9 +17,6 @@ This package defines the following interfaces:
 - [_ResponseStruct_][] encapsulates the server response status line, headers,
   and body.
 
-- [_ResponseStatusLineStruct_][] encapsulates status line for the response,
-  including the HTTP version and the status code.
-
 - [_ResponseHeadersCollection_][] encapsulates the headers for the response,
   including affordances for cookie management.
 
@@ -46,49 +43,6 @@ Notes:
   and sends them only when the `sendResponse()` method is called.
 
 {{= docs }}
-
-- ```
-  response_cookie_array array{
-      name: response_cookie_name_string,
-      value: response_cookie_value_string,
-      attributes: response_cookie_attributes_array
-  }
-  ```
-    - An `array` of cookie components.
-
-- ```
-  response_cookie_attributes_array array{
-      expires?:string,
-      max-age?:numeric-string,
-      path?:string,
-      domain?:string,
-      secure?:true,
-      httponly?:true,
-      samesite?:string,
-      partitioned?:true,
-  }
-  ```
-    - An `array` intended to specify cookie attributes.
-
-- `response_cookie_name_string`
-    - A `string` intended as a cookie name.
-
-- `response_cookie_value_string`
-    - A `string` intended as a cookie value.
-
-- `response_header_field_string`
-    - A `string` intended to be a header field name, typically as part of the
-      first argument to [`header()`][].
-
-- `response_header_value_string`
-    - A `string` intended to be header value, typically as part of the first
-      argument to [`header()`][].
-
-- `response_http_version_string`
-    - A `string` used for specifying an HTTP version.
-
-- `response_status_code_int`
-    - An `int` specifying an HTTP response code.
 
 ## Implementations
 
@@ -140,8 +94,8 @@ providing them with their implementations.
 while not the majority design choice, allowing for a reason phrase warrants
 consideration.
 
-On further inspection, the projects that allow for a reason phrase sometimes set
-it with the status code, and sometimes set it separately. This makes it
+On further inspection, some of the projects that allow for a reason phrase set
+it with the status code, while others set it separately. This makes it
 difficult to resolve the differences between the projects. Given that the HTTP
 specifications indicate reason phrases are optional, Response-Interop does not
 attempt to resolve those differences.
@@ -155,9 +109,9 @@ Research revealed that separate header and/or cookie collections are used in 6
 of the 13 projects. Thus, while not the majority design choice, delegating these
 methods to a separate object is common enough to warrant consideration.
 
-With that in mind, Response-Interop finds that the segregation of status line,
-headers, and body into their own properties appropriately separates the concerns
-around building a response.
+With that in mind, Response-Interop finds that the segregation of HTTP version,
+status code, headers, and body into their own properties appropriately separates
+the concerns around building a response.
 
 ### Why does _ResponseHeadersCollection_ allow `string` but not _Stringable_ `$value` types?
 
@@ -290,9 +244,11 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases
 [_Throwable_]: https://php.net/Throwable
-[`header()`]: https://php.net/header
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`header()`]: https://php.net/header
 [`setcookie()`]: https://php.net/setcookie
+[`urldecode()`]: https://php.net/urldecode
+[`urlencode()`]: https://php.net/urlencode
 [BCP 14]: https://www.rfc-editor.org/info/bcp14
 [RFC 2119]: https://www.rfc-editor.org/rfc/rfc2119.txt
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265

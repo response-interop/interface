@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * The _ResponseHeadersCollection_ interface encapsulates the headers for
+ * The [_ResponseHeadersCollection_][] interface encapsulates the headers for
  * the response, including affordances for cookie management.
  *
  * - Directives:
@@ -13,13 +13,13 @@ namespace ResponseInterop\Interface;
  *       argument to lower case.
  *
  *     - Implementations MUST validate each `response_header_field_string`
- *       argument, and MUST throw a _ResponseThrowable_ on invalidity.
+ *       argument, and MUST throw a [_ResponseThrowable_][] on invalidity.
  *
- *     - Implementations MUST throw a _ResponseThrowable_ if a
+ *     - Implementations MUST throw a [_ResponseThrowable_][] if a
  *       `response_header_value_string` argument is blank.
  *
  *     - Implementations MAY validate other method arguments; when doing
- *       so, implementations MUST throw a _ResponseThrowable_ on invalidity.
+ *       so, implementations MUST throw a [_ResponseThrowable_][] on invalidity.
  *
  * - Notes:
  *
@@ -46,6 +46,12 @@ namespace ResponseInterop\Interface;
  *
  * @phpstan-import-type response_header_value_string from ResponseTypeAliases
  *
+ * @phpstan-import-type response_headers_array from ResponseTypeAliases
+ *
+ * @phpstan-import-type response_named_cookie_arrays from ResponseTypeAliases
+ *
+ * @phpstan-import-type response_named_cookie_strings from ResponseTypeAliases
+ *
  */
 interface ResponseHeadersCollection
 {
@@ -59,7 +65,7 @@ interface ResponseHeadersCollection
      *       retain the `$value` such that the cookie can be retrieved by
      *       name (e.g. via `getCookieAsArray()` or `getCookieAsString()`);
      *       if the cookie cannot be retained in such a way, implementations
-     *       MUST throw a _ResponseThrowable_.
+     *       MUST throw a [_ResponseThrowable_][].
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -80,10 +86,10 @@ interface ResponseHeadersCollection
      *       all previous `$value`s.
      *
      *     - If the normalized `$field` is `set-cookie`, implementations MUST
-     *       retain the `$value` such that can be retrieved by name (e.g. via
+     *       retain the `$value` such that it can be retrieved by name (e.g. via
      *       `getCookieAsArray()` or `getCookieAsString()`); if the cookie
      *       cannot be retained in such a way, implementations MUST throw a
-     *       _ResponseThrowable_.
+     *       [_ResponseThrowable_][].
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -105,10 +111,10 @@ interface ResponseHeadersCollection
      *     - Implementations MUST return `null` if there is no `$value` for
      *       the header.
      *
-     *     - Implementations MUST use a string if there is only one `$value`
+     *     - Implementations MUST return a string if there is only one `$value`
      *       for the header.
      *
-     *     - Implementations MUST use an array of strings if there is more
+     *     - Implementations MUST return an array of strings if there is more
      *       than one `$value` for the header.
      *
      * - Notes:
@@ -122,7 +128,7 @@ interface ResponseHeadersCollection
      *
      *     - **Cookies are always returned as strings.** This is to keep the
      *       return types consistent for all headers, such that the returned
-     *       values can be used directly in `header()` calls if needed. In
+     *       values can be used directly in [`header()`][] calls if needed. In
      *       practical terms, the implementation should use
      *       `getCookiesAsStrings()` as the source for `set-cookie` values.
      *
@@ -158,11 +164,11 @@ interface ResponseHeadersCollection
      *
      *     - **Cookies are always returned as strings.** This is to keep the
      *       return types consistent for all headers, such that the returned
-     *       values can be used directly in `header()` calls if needed. In
+     *       values can be used directly in [`header()`][] calls if needed. In
      *       practical terms, the implementation should use
      *       `getCookiesAsStrings()` as the source for `set-cookie` values.
      *
-     * @return array<response_header_field_string,response_header_value_string|response_header_value_string[]>
+     * @return response_headers_array
      */
     public function getHeaders() : array;
 
@@ -208,7 +214,7 @@ interface ResponseHeadersCollection
      *
      *     - Implementations retaining the cookie as a
      *       `response_header_value_string` MUST convert it to a
-     *       `response_cookie_array` via the _ResponseCookieHelperService_
+     *       `response_cookie_array` via the [_ResponseCookieHelperService_][]
      *       method `parseResponseCookieString()`.
      *
      * @param response_cookie_name_string $name
@@ -225,7 +231,7 @@ interface ResponseHeadersCollection
      *     - Implementations retaining the cookie as a
      *       `response_cookie_array` MUST convert it to a
      *       `response_header_value_string` via the
-     *       _ResponseCookieHelperService_ method
+     *       [_ResponseCookieHelperService_][] method
      *       `composeResponseCookieString()`.
      *
      * @param response_cookie_name_string $name
@@ -261,7 +267,7 @@ interface ResponseHeadersCollection
      *      `response_header_value_string` MUST represent that cookie as if
      *      it had been retrieved via the `getCookieAsArray()` method.
      *
-     * @return array<response_cookie_name_string,response_cookie_array>
+     * @return response_named_cookie_arrays
      */
     public function getCookiesAsArrays() : array;
 
@@ -275,7 +281,7 @@ interface ResponseHeadersCollection
      *       MUST represent that cookie as if it had been retrieved via the
      *       `getCookieAsString()` method.
      *
-     * @return array<response_cookie_name_string,response_header_value_string>
+     * @return response_named_cookie_strings
      */
     public function getCookiesAsStrings() : array;
 
