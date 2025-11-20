@@ -8,6 +8,7 @@ $files = [
     __DIR__ . "/src/ResponseHeadersCollection.php",
     __DIR__ . "/src/ResponseBodyHandler.php",
     __DIR__ . "/src/ResponseCookieHelperService.php",
+    __DIR__ . "/src/ResponseSenderService.php",
     __DIR__ . "/src/ResponseThrowable.php",
     __DIR__ . "/src/ResponseTypeAliases.php",
 ];

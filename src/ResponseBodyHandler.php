@@ -7,7 +7,7 @@ use StreamInterop\Interface\ResourceStream;
 
 /**
  * The [_ResponseBodyHandler_][] interface affords management and sending of
- * non-string, resource-intensive, or response-modifying content.
+ * non-string, resource-intensive, or header-modifying content.
  *
  * - Notes:
  *
@@ -17,7 +17,7 @@ use StreamInterop\Interface\ResourceStream;
  *       generated from an array, object, file, stream, or some other source. Many
  *       of these sources might best be converted only as the response is being
  *       sent; for example, when sending a file to download, it may be wise to
- *       send the file in chunks instead ofreading the whole file into memory.
+ *       send the file in chunks instead of reading the whole file into memory.
  *
  *     - **Setting and getting content is implementation-specific.** Because of the
  *       varied, domain-specific, and sometimes proprietary requirements of
@@ -51,10 +51,6 @@ interface ResponseBodyHandler
     /**
      * Sends the body content to an output stream.
      *
-     * - Directives:
-     *
-     *     - Implementations MUST write the body content to the `$stream`.
-     *
      * - Notes:
      *
      *     - **Sending logic is content- and implementation-specific.** Different
@@ -62,11 +58,11 @@ interface ResponseBodyHandler
      *       be amenable to direct output, others may require specific encoding,
      *       and yet others may require more involved resource or stream handling.
      *
-     *     - **Use a stream resource, not `echo`, to send the body.**
-     *       Although echoing a body string is the single most common
-     *       use case, writing to the `php://output` stream does
-     *       exactly the same thing. This also allows specifying the
-     *       output stream at call-time, such as when testing.
+     *     - **Send the body by writing to a stream resource, not by calling
+     *       `echo` or `print`.** Although echoing a body string is the single
+     *       most common use case, writing to the `php://output` stream does
+     *       exactly the same thing. This also allows specifying the output
+     *       stream at call-time, such as when testing.
      */
-    public function sendResponseBody(ResourceStream $stream) : void;
+    public function sendResponseBody(ResourceStream $output) : void;
 }

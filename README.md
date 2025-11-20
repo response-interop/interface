@@ -21,10 +21,12 @@ This package defines the following interfaces:
   including affordances for cookie management.
 
 - [_ResponseBodyHandler_][] affords management of non-string,
-  resource-intensive, or response-modifying content.
+  resource-intensive, or header-modifying content.
 
 - [_ResponseCookieHelperService_][] affords conversion of cookie representations
   to and from strings and arrays.
+
+- [_ResponseSenderService_][] affords sending the server response.
 
 Response-Interop also defines a marker interface, [_ResponseThrowable_][], for
 marking an [_Exception_][] as response-related.
@@ -86,41 +88,6 @@ The [_ResponseStruct_][] interface encapsulates the server response.
               such as when sending a large file for download, at which point a
               [_ResponseBodyHandler_][] instance affords improved resource management
               and response modification.
-
-- Methods:
-
-    - ```php
-      public function sendResponse(
-          StreamInterop\Interface\ResourceStream $stream,
-      ) : void;
-      ```
-        - Sends the response.
-
-        - Directives:
-
-            - Implementations MAY check to see if the response can be
-              sent; when doing so, implementations MUST throw a
-              [_ResponseThrowable_][] if the response cannot be sent.
-
-            - If the `$body` is an instance of [_ResponseBodyHandler_][],
-              implementations MUST call its `prepareResponse()` method before
-              sending anything.
-
-            - Implementations SHOULD use [`header()`][] to send headers, but
-              MAY use some other mechanism.
-
-            - Implementations SHOULD send header fields in lower case,
-              but MAY send header fields in some other RFC-approved case.
-
-            - Implementations MUST write the `$body` to the `$stream`.
-
-        - Notes:
-
-            - **Use a stream resource, not `echo`, to send the body.**
-              Although echoing a body string is the single most common
-              use case, writing to the `php://output` stream does
-              exactly the same thing. This also allows specifying the
-              output stream at call-time, such as when testing.
 
 ### _ResponseHeadersCollection_
 
@@ -380,7 +347,7 @@ the response, including affordances for cookie management.
 ### _ResponseBodyHandler_
 
 The [_ResponseBodyHandler_][] interface affords management and sending of
-non-string, resource-intensive, or response-modifying content.
+non-string, resource-intensive, or header-modifying content.
 
 - Notes:
 
@@ -390,7 +357,7 @@ non-string, resource-intensive, or response-modifying content.
       generated from an array, object, file, stream, or some other source. Many
       of these sources might best be converted only as the response is being
       sent; for example, when sending a file to download, it may be wise to
-      send the file in chunks instead ofreading the whole file into memory.
+      send the file in chunks instead of reading the whole file into memory.
 
     - **Setting and getting content is implementation-specific.** Because of the
       varied, domain-specific, and sometimes proprietary requirements of
@@ -423,14 +390,10 @@ non-string, resource-intensive, or response-modifying content.
 
     - ```php
       public function sendResponseBody(
-          StreamInterop\Interface\ResourceStream $stream,
+          StreamInterop\Interface\ResourceStream $output,
       ) : void;
       ```
         - Sends the body content to an output stream.
-
-        - Directives:
-
-            - Implementations MUST write the body content to the `$stream`.
 
         - Notes:
 
@@ -439,11 +402,11 @@ non-string, resource-intensive, or response-modifying content.
               be amenable to direct output, others may require specific encoding,
               and yet others may require more involved resource or stream handling.
 
-            - **Use a stream resource, not `echo`, to send the body.**
-              Although echoing a body string is the single most common
-              use case, writing to the `php://output` stream does
-              exactly the same thing. This also allows specifying the
-              output stream at call-time, such as when testing.
+            - **Send the body by writing to a stream resource, not by calling
+              `echo` or `print`.** Although echoing a body string is the single
+              most common use case, writing to the `php://output` stream does
+              exactly the same thing. This also allows specifying the output
+              stream at call-time, such as when testing.
 
 ### _ResponseCookieHelperService_
 
@@ -540,6 +503,44 @@ representations.
 
             - **The cookie name and value are to be encoded.** Typically this
               means using [`urlencode()`][].
+
+### _ResponseSenderService_
+
+The [_ResponseSenderService_][] affords sending the server response.
+
+- Methods:
+
+    - ```php
+      public function sendResponse(
+          ResponseStruct $response,
+          StreamInterop\Interface\ResourceStream $output,
+      ) : void;
+      ```
+        - Sends the response.
+
+        - Directives:
+
+            - Implementations MAY check to see if the response can be sent; when
+              doing so, implementations MUST throw a [_ResponseThrowable_][] if
+              the response cannot be sent.
+
+            - If the [_ResponseStruct_][] `$body` is an instance of
+              [_ResponseBodyHandler_][], implementations MUST call its
+              `prepareResponse()` method before sending anything.
+
+            - Implementations SHOULD use [`header()`][] to send headers, but MAY
+              use some other mechanism.
+
+            - Implementations SHOULD send header fields in lower case, but MAY
+              send header fields in some other RFC-approved case.
+
+        - Notes:
+
+            - **Send the body by writing to a stream resource, not by calling
+              `echo` or `print`.** Although echoing a body string is the single
+              most common use case, writing to the `php://output` stream does
+              exactly the same thing. This also allows specifying the output
+              stream at call-time, such as when testing.
 
 ### _ResponseThrowable_
 
@@ -844,7 +845,7 @@ not specify affordances for other behaviors.
 [_ResponseBodyHandler_]: #response-body-content
 [_ResponseCookieHelperService_]: #response-cookie-helper-service
 [_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseStatusLineStruct_]: #response-status-line-struct
+[_ResponseSenderService_]: #response-sender-service
 [_ResponseStruct_]: #response-struct
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases

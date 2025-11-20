@@ -21,10 +21,12 @@ This package defines the following interfaces:
   including affordances for cookie management.
 
 - [_ResponseBodyHandler_][] affords management of non-string,
-  resource-intensive, or response-modifying content.
+  resource-intensive, or header-modifying content.
 
 - [_ResponseCookieHelperService_][] affords conversion of cookie representations
   to and from strings and arrays.
+
+- [_ResponseSenderService_][] affords sending the server response.
 
 Response-Interop also defines a marker interface, [_ResponseThrowable_][], for
 marking an [_Exception_][] as response-related.
@@ -271,7 +273,7 @@ not specify affordances for other behaviors.
 [_ResponseBodyHandler_]: #response-body-content
 [_ResponseCookieHelperService_]: #response-cookie-helper-service
 [_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseStatusLineStruct_]: #response-status-line-struct
+[_ResponseSenderService_]: #response-sender-service
 [_ResponseStruct_]: #response-struct
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases
