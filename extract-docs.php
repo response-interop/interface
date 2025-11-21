@@ -84,6 +84,8 @@ $docs = implode(PHP_EOL, $docs) . PHP_EOL;
 $readme = file_get_contents(__DIR__ . '/README.tpl.md');
 $readme = str_replace('{{= docs }}', $docs, $readme);
 $readme = preg_replace('/^\s+$/m', '', $readme);
+$readme = preg_replace('/^- Methods:\n\n###/m', "###", $readme);
+
 file_put_contents(__DIR__ . '/README.md', $readme);
 
 function cleanComment($r)
