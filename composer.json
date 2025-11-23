@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
-        "stream-interop/interface": "1.x@dev"
+        "php": "^8.4"
     },
     "autoload": {
         "psr-4" : {

@@ -137,6 +137,26 @@ attempt to resolve those differences.
 Implementors desiring a reason phrase are encouraged to add one approriate for
 the status code, perhaps in their `sendResponse()` logic.
 
+### Why is _ResponseStruct_ not self-sending?
+
+The majority of researched projects (9/13) have a `send()` method, or its
+equivalent, directly on their response objects. The remainder place the sending
+logic somewhere outside the response object itself.
+
+Earlier versions of Response-Interop defined a _ResponseStruct_ method called
+`sendResponse()` for sending the response. However, private review suggested
+that a struct-like object ought not to have methods on it.
+
+Further, private review indicated that separating the sending logic to its own
+interface would make it easier to provide alternative mechanisms for sending,
+such as during testing, or when integrating with pre-existing packages and
+libraries.
+
+With all that in mind, Response-Interop opts to separate the sending logic to
+its own interface, _ResponseSenderService_. This keeps the _ResponseStruct_
+more struct-like, and makes the sending logic independent of any particular
+_ResponseStruct_ implementation.
+
 ### Why not put the _ResponseHeadersCollection_ methods directly on the _ResponseStruct_?
 
 Research revealed that separate header and/or cookie collections are used in 6

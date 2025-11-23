@@ -389,24 +389,20 @@ non-string, resource-intensive, or header-modifying content.
               content-specific fashion.
 
     - ```php
-      public function sendResponseBody(
-          StreamInterop\Interface\ResourceStream $output,
-      ) : void;
+      public function sendResponseBody(ResponseSenderService $sender) : void;
       ```
-        - Sends the body content to an output stream.
+        - Sends the body content of the response.
+
+        - Directives:
+
+            - Implementations MUST send the body content using the `$sender`.
 
         - Notes:
 
-            - **Sending logic is content- and implementation-specific.** Different
-              kinds of content require different sending mechanisms. Some kinds may
-              be amenable to direct output, others may require specific encoding,
-              and yet others may require more involved resource or stream handling.
-
-            - **Send the body by writing to a stream resource, not by calling
-              `echo` or `print`.** Although echoing a body string is the single
-              most common use case, writing to the `php://output` stream does
-              exactly the same thing. This also allows specifying the output
-              stream at call-time, such as when testing.
+            - **Send the body via the `$sender`, not by using `echo` or some
+              other means.** This allows the caller to specify the output
+              destination. The `$sender` affords methods for sending strings
+              and resources (whether in whole or in part).
 
 ### _ResponseCookieHelperService_
 
@@ -511,10 +507,7 @@ The [_ResponseSenderService_][] affords sending the server response.
 - Methods:
 
     - ```php
-      public function sendResponse(
-          ResponseStruct $response,
-          StreamInterop\Interface\ResourceStream $output,
-      ) : void;
+      public function sendResponse(ResponseStruct $response) : void;
       ```
         - Sends the response.
 
@@ -534,13 +527,84 @@ The [_ResponseSenderService_][] affords sending the server response.
             - Implementations SHOULD send header fields in lower case, but MAY
               send header fields in some other RFC-approved case.
 
+    - ```php
+      public function sendResponseBodyString(Stringable|string $content) : void;
+      ```
+        - Sends body content from a string.
+
+        - Directives:
+
+            - Implementations SHOULD write the string to the `php://output`
+              stream, but MAY use some other mechanism or destination.
+
         - Notes:
 
-            - **Send the body by writing to a stream resource, not by calling
-              `echo` or `print`.** Although echoing a body string is the single
-              most common use case, writing to the `php://output` stream does
+            - **Prefer writing to a resource over calling `echo`, `print`,
+              etc.** Although echoing a body string is the single most common
+              use case, calling `fwrite()` with a `php://output` resource does
               exactly the same thing. This also allows specifying the output
-              stream at call-time, such as when testing.
+              destination at call-time, such as when testing.
+
+    - ```php
+      public function sendResponseBodyResource(
+          resource $content,
+          ?int $length,
+          ?int $offset,
+      ) : int;
+      ```
+        - Sends body content from a resource.
+
+        - Directives:
+
+            - Implementations SHOULD write the resource to the `php://output`
+              stream, but MAY use some other mechanism or destination.
+
+            - If the `$offset` is null, implementations MUST begin reading
+              from the current `$content` pointer position.
+
+            - If the `$offset` is zero or positive, implementations MUST begin
+              reading from the `$content` starting at that byte; implementations
+              MAY move the pointer as needed, e.g. via [`fseek()`][].
+
+            - If the `$length` is null, implementations MUST send all remaining
+              bytes from the `$content` resource.
+
+            - If the `$length` is not null, implementations MUST send that many
+              bytes from the resource, or up to the end of the resource.
+
+            - Implementations MUST return the number of bytes sent.
+
+            - Implementations MUST throw a [_ResponseThrowable_][] on failure.
+
+        - Notes:
+
+            - **The method signature is subtly different from related streaming
+              functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
+              to `$offset = 0`, and ['stream_get_contents()`] defaults to
+              `-1`, the default here is `null`.
+
+            - **By default, do not move the starting pointer position.** Some
+              implementations attempt to [`rewind()`][] the resource before
+              sending. When sending a complete file, that may be fine; however,
+              it may be necessary to start at exactly where the resource pointer
+              already is. Therefore, do not change the pointer starting position
+              when the `$offset` is null.
+
+            - ** An `$offset` of `0` is the equivalent of rewind-before-send.**
+              To indicate a [`rewind()`][] or its equivalent is needed before
+              sending, consumers should specify an `$offset` of `0`.
+              Alternatively, consumers might [`rewind()`][] the resource
+              themselves before sending.
+
+    - ```php
+      public function flushResponse() : void;
+      ```
+        - Flushes the system output buffer.
+
+        - Notes:
+
+            - **This is an equivalent to [`flush()`][].** It may be useful when
+              sending content with `Transfer-Encoding: chunked`.
 
 ### _ResponseThrowable_
 
@@ -708,6 +772,20 @@ attempt to resolve those differences.
 
 Implementors desiring a reason phrase are encouraged to add one approriate for
 the status code, perhaps in their `sendResponse()` logic.
+
+### Why is _ResponseStruct_ not self-sending?
+
+The majority of researched projects (9/13) have a `send()` method, or its
+equivalent, directly on their response objects. The remainder place the sending
+logic somewhere outside the response object itself.
+
+Earlier versions of Response-Interop defined a _ResponseStruct_ method called
+`sendResponse()` for sending the response. However, private review indicated
+that a struct-like object ought not to have methods on it.
+
+With that in mind, Response-Interop separates the sending logic to another
+interface, _ResponseSenderService_. This keeps the _ResponseStruct_ more
+struct-like, composed only of properties.
 
 ### Why not put the _ResponseHeadersCollection_ methods directly on the _ResponseStruct_?
 

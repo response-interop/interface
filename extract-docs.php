@@ -49,6 +49,7 @@ foreach ($files as $file) {
         $docs[] = "- Methods:";
         $docs[] = "";
 
+        // @TODO must show default values for params
         foreach ($methods as $method) {
             if ($method->getDeclaringClass() != $class) {
                 continue;
@@ -64,7 +65,7 @@ foreach ($files as $file) {
             }
             $signature = rtrim($signature, ", ");
             preg_match("/@return (.*)/", $annotations, $matches);
-            $type = stripNamespace($namespace, $matches[1] ?? $method->getReturnType());
+            $type = stripNamespace($namespace, $matches[1] ?? $method->getReturnType()); // if null, blow up, need a return
             $signature .= ") : {$type};";
 
             if (strlen($signature) > 80) {
