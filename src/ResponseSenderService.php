@@ -82,7 +82,7 @@ interface ResponseSenderService
      *
      *     - **The method signature is subtly different from related streaming
      *       functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
-     *       to `$offset = 0`, and ['stream_get_contents()`] defaults to
+     *       to `$offset = 0`, and [`stream_get_contents()`] defaults to
      *       `-1`, the default here is `null`.
      *
      *     - **By default, do not move the starting pointer position.** Some
@@ -92,7 +92,7 @@ interface ResponseSenderService
      *       already is. Therefore, do not change the pointer starting position
      *       when the `$offset` is null.
      *
-     *     - ** An `$offset` of `0` is the equivalent of rewind-before-send.**
+     *     - **An `$offset` of `0` is the equivalent of rewind-before-send.**
      *       To indicate a [`rewind()`][] or its equivalent is needed before
      *       sending, consumers should specify an `$offset` of `0`.
      *       Alternatively, consumers might [`rewind()`][] the resource

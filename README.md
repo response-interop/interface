@@ -580,7 +580,7 @@ The [_ResponseSenderService_][] affords sending the server response.
 
             - **The method signature is subtly different from related streaming
               functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
-              to `$offset = 0`, and ['stream_get_contents()`] defaults to
+              to `$offset = 0`, and [`stream_get_contents()`] defaults to
               `-1`, the default here is `null`.
 
             - **By default, do not move the starting pointer position.** Some
@@ -590,7 +590,7 @@ The [_ResponseSenderService_][] affords sending the server response.
               already is. Therefore, do not change the pointer starting position
               when the `$offset` is null.
 
-            - ** An `$offset` of `0` is the equivalent of rewind-before-send.**
+            - **An `$offset` of `0` is the equivalent of rewind-before-send.**
               To indicate a [`rewind()`][] or its equivalent is needed before
               sending, consumers should specify an `$offset` of `0`.
               Alternatively, consumers might [`rewind()`][] the resource
@@ -780,12 +780,18 @@ equivalent, directly on their response objects. The remainder place the sending
 logic somewhere outside the response object itself.
 
 Earlier versions of Response-Interop defined a _ResponseStruct_ method called
-`sendResponse()` for sending the response. However, private review indicated
+`sendResponse()` for sending the response. However, private review suggested
 that a struct-like object ought not to have methods on it.
 
-With that in mind, Response-Interop separates the sending logic to another
-interface, _ResponseSenderService_. This keeps the _ResponseStruct_ more
-struct-like, composed only of properties.
+Further, private review indicated that separating the sending logic to its own
+interface would make it easier to provide alternative mechanisms for sending,
+such as during testing, or when integrating with pre-existing packages and
+libraries.
+
+With all that in mind, Response-Interop opts to separate the sending logic to
+its own interface, _ResponseSenderService_. This keeps the _ResponseStruct_
+more struct-like, and makes the sending logic independent of any particular
+_ResponseStruct_ implementation.
 
 ### Why not put the _ResponseHeadersCollection_ methods directly on the _ResponseStruct_?
 
@@ -928,7 +934,13 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases
 [_Throwable_]: https://php.net/Throwable
+[`flush()`]: https://php.net/flush
+[`fseek()`]: https://php.net/fseek
+[`fwrite()`]: https://php.net/fwrite
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`rewind()`]: https://php.net/rewind
+[`stream_get_contents()`]: https://php.net/stream_get_contents
+[`stream_copy_to_stream()`]: https://php.net/stream_copy_to_stream
 [`header()`]: https://php.net/header
 [`setcookie()`]: https://php.net/setcookie
 [`urldecode()`]: https://php.net/urldecode

@@ -298,7 +298,13 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #response-throwable
 [_ResponseTypeAliases_]: #response-type-aliases
 [_Throwable_]: https://php.net/Throwable
+[`flush()`]: https://php.net/flush
+[`fseek()`]: https://php.net/fseek
+[`fwrite()`]: https://php.net/fwrite
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`rewind()`]: https://php.net/rewind
+[`stream_get_contents()`]: https://php.net/stream_get_contents
+[`stream_copy_to_stream()`]: https://php.net/stream_copy_to_stream
 [`header()`]: https://php.net/header
 [`setcookie()`]: https://php.net/setcookie
 [`urldecode()`]: https://php.net/urldecode
