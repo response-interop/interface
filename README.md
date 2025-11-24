@@ -283,7 +283,7 @@ the response, including affordances for cookie management.
       ) : ?response_header_value_string;
       ```
         - Returns a named cookie as a string suitable for use as a header
-        value, or or `null` if it does not exist.
+        value, or `null` if it does not exist.
 
         - Directives:
 
