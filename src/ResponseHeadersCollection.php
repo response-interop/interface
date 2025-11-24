@@ -224,7 +224,7 @@ interface ResponseHeadersCollection
 
     /**
      * Returns a named cookie as a string suitable for use as a header
-     * value, or or `null` if it does not exist.
+     * value, or `null` if it does not exist.
      *
      * - Directives:
      *
