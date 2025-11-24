@@ -14,7 +14,7 @@ use Stringable;
 interface ResponseSenderService
 {
     /**
-     * Sends the response.
+     * Sends the entire response, including the status line, headers, and body.
      *
      * - Directives:
      *
