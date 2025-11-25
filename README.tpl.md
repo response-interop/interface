@@ -290,13 +290,13 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyHandler_]: #response-body-content
-[_ResponseCookieHelperService_]: #response-cookie-helper-service
-[_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseSenderService_]: #response-sender-service
-[_ResponseStruct_]: #response-struct
-[_ResponseThrowable_]: #response-throwable
-[_ResponseTypeAliases_]: #response-type-aliases
+[_ResponseBodyHandler_]: ./README.md#responsebodyhandler
+[_ResponseCookieHelperService_]: ./README.md#responsecookiehelperservice
+[_ResponseHeadersCollection_]: ./README.md#responseheaderscollection
+[_ResponseSenderService_]: ./README.md#responsesenderservice
+[_ResponseStruct_]: ./README.md#responsestruct
+[_ResponseThrowable_]: ./README.md#responsethrowable
+[_ResponseTypeAliases_]: ./README.md#responsetypealiases
 [_Throwable_]: https://php.net/Throwable
 [`flush()`]: https://php.net/flush
 [`fseek()`]: https://php.net/fseek

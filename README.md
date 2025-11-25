@@ -926,13 +926,13 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyHandler_]: #response-body-content
-[_ResponseCookieHelperService_]: #response-cookie-helper-service
-[_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseSenderService_]: #response-sender-service
-[_ResponseStruct_]: #response-struct
-[_ResponseThrowable_]: #response-throwable
-[_ResponseTypeAliases_]: #response-type-aliases
+[_ResponseBodyHandler_]: #responsebodyhandler
+[_ResponseCookieHelperService_]: #responsecookiehelperservice
+[_ResponseHeadersCollection_]: #responseheaderscollection
+[_ResponseSenderService_]: #responsesenderservice
+[_ResponseStruct_]: #responsestruct
+[_ResponseThrowable_]: #responsethrowable
+[_ResponseTypeAliases_]: #responsetypealiases
 [_Throwable_]: https://php.net/Throwable
 [`flush()`]: https://php.net/flush
 [`fseek()`]: https://php.net/fseek
