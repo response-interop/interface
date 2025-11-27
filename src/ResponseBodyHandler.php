@@ -57,7 +57,7 @@ interface ResponseBodyHandler
      *
      *     - **Send the body via the `$sender`, not by using `echo` or some
      *       other means.** This allows the sending logic to specify the output
-     *       destination. The `$sender` provides afforances for sending strings
+     *       destination. The `$sender` provides affordances for sending strings
      *       and resources (whether in whole or in part).
      */
     public function sendResponseBody(ResponseSenderService $sender) : void;

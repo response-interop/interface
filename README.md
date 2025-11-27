@@ -47,46 +47,46 @@ Notes:
 
 The [_ResponseStruct_][] interface encapsulates the server response.
 
-- Properties:
+#### _ResponseStruct_ Properties
 
-    - ```php
-      public response_http_version_string $httpVersion { get; set; }
-      ```
-        - The HTTP version string for the response; e.g. `'1.1'`.
+- ```php
+  public response_http_version_string $httpVersion { get; set; }
+  ```
+    - The HTTP version string for the response; e.g. `'1.1'`.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MAY validate this value; implementations doing
-              so MUST throw a [_ResponseThrowable_][] on invalidity.
+        - Implementations MAY validate this value; implementations doing
+          so MUST throw a [_ResponseThrowable_][] on invalidity.
 
-    - ```php
-      public response_status_code_int $statusCode { get; set; }
-      ```
-        - The status code for the response; e.g. `200`.
+- ```php
+  public response_status_code_int $statusCode { get; set; }
+  ```
+    - The status code for the response; e.g. `200`.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MAY validate this value; implementations doing
-              so MUST throw a [_ResponseThrowable_][] on invalidity.
+        - Implementations MAY validate this value; implementations doing
+          so MUST throw a [_ResponseThrowable_][] on invalidity.
 
-    - ```php
-      public ResponseHeadersCollection $headers { get; set; }
-      ```
-        - The headers for the response, including affordances for cookie management.
+- ```php
+  public ResponseHeadersCollection $headers { get; set; }
+  ```
+    - The headers for the response, including affordances for cookie management.
 
-    - ```php
-      public Stringable|ResponseBodyHandler|string $body { get; set; }
-      ```
-        - The body for the response.
+- ```php
+  public Stringable|ResponseBodyHandler|string $body { get; set; }
+  ```
+    - The body for the response.
 
-        - Notes:
+    - Notes:
 
-            - **The `$body` may be a string, a _Stringable_ object, or some other
-              content source.** The single most common kind of body content is an
-              in-memory string. However, there are other common kinds of content,
-              such as when sending a large file for download, at which point a
-              [_ResponseBodyHandler_][] instance affords improved resource management
-              and response modification.
+        - **The `$body` may be a string, a _Stringable_ object, or some other
+          content source.** The single most common kind of body content is an
+          in-memory string. However, there are other common kinds of content,
+          such as when sending a large file for download, at which point a
+          [_ResponseBodyHandler_][] instance affords improved resource management
+          and response modification.
 
 ### _ResponseHeadersCollection_
 
@@ -120,228 +120,228 @@ the response, including affordances for cookie management.
     - **Header values cannot be blank.** If `trim($value) === ''` then
       the `$value` is blank.
 
-- Methods:
+#### _ResponseHeadersCollection_ Methods
 
-    - ```php
-      public function setHeader(
-          response_header_field_string $field,
-          response_header_value_string $value,
-      ) : void;
-      ```
-        - Sets the `$value` for a header, replacing all existing `$value`s for
-        that header.
+- ```php
+  public function setHeader(
+      response_header_field_string $field,
+      response_header_value_string $value,
+  ) : void;
+  ```
+    - Sets the `$value` for a header, replacing all existing `$value`s for
+    that header.
 
-        - Directives:
+    - Directives:
 
-            - If the normalized `$field` is `set-cookie`, implementations MUST
-              retain the `$value` such that the cookie can be retrieved by
-              name (e.g. via `getCookieAsArray()` or `getCookieAsString()`);
-              if the cookie cannot be retained in such a way, implementations
-              MUST throw a [_ResponseThrowable_][].
+        - If the normalized `$field` is `set-cookie`, implementations MUST
+          retain the `$value` such that the cookie can be retrieved by
+          name (e.g. via `getCookieAsArray()` or `getCookieAsString()`);
+          if the cookie cannot be retained in such a way, implementations
+          MUST throw a [_ResponseThrowable_][].
 
-    - ```php
-      public function addHeader(
-          response_header_field_string $field,
-          response_header_value_string $value,
-      ) : void;
-      ```
-        - Adds a `$value` for a header, keeping all previous `$value`s for that
-        header.
+- ```php
+  public function addHeader(
+      response_header_field_string $field,
+      response_header_value_string $value,
+  ) : void;
+  ```
+    - Adds a `$value` for a header, keeping all previous `$value`s for that
+    header.
 
-        - Directives:
+    - Directives:
 
-            - If there are no existing `$value`s for the header,
-              implementations MUST behave as if `setHeader()` was called with
-              the same `$field` and `$value`.
+        - If there are no existing `$value`s for the header,
+          implementations MUST behave as if `setHeader()` was called with
+          the same `$field` and `$value`.
 
-            - Implementations MUST retain each added `$value` separately from
-              all previous `$value`s.
+        - Implementations MUST retain each added `$value` separately from
+          all previous `$value`s.
 
-            - If the normalized `$field` is `set-cookie`, implementations MUST
-              retain the `$value` such that it can be retrieved by name (e.g. via
-              `getCookieAsArray()` or `getCookieAsString()`); if the cookie
-              cannot be retained in such a way, implementations MUST throw a
-              [_ResponseThrowable_][].
+        - If the normalized `$field` is `set-cookie`, implementations MUST
+          retain the `$value` such that it can be retrieved by name (e.g. via
+          `getCookieAsArray()` or `getCookieAsString()`); if the cookie
+          cannot be retained in such a way, implementations MUST throw a
+          [_ResponseThrowable_][].
 
-    - ```php
-      public function hasHeader(response_header_field_string $field) : bool;
-      ```
-        - Reports if a header exists.
+- ```php
+  public function hasHeader(response_header_field_string $field) : bool;
+  ```
+    - Reports if a header exists.
 
-    - ```php
-      public function getHeader(
-          string $field,
-      ) : null|response_header_value_string|response_header_value_string[];
-      ```
-        - Returns the `$value`(s) for a header.
+- ```php
+  public function getHeader(
+      string $field,
+  ) : null|response_header_value_string|response_header_value_string[];
+  ```
+    - Returns the `$value`(s) for a header.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MUST return `null` if there is no `$value` for
-              the header.
+        - Implementations MUST return `null` if there is no `$value` for
+          the header.
 
-            - Implementations MUST return a string if there is only one `$value`
-              for the header.
+        - Implementations MUST return a string if there is only one `$value`
+          for the header.
 
-            - Implementations MUST return an array of strings if there is more
-              than one `$value` for the header.
+        - Implementations MUST return an array of strings if there is more
+          than one `$value` for the header.
 
-        - Notes:
+    - Notes:
 
-            - **This method returns a string if there is only one value.**
-              This is to support the most common  case for most response
-              headers; i.e., a single value. This reduces the occurrence of
-              the idiom `getHeader('field-name')[0]`. If consumers require the
-              return to be an array regardless of the number of values, they
-              may cast the return to `(array)`.
+        - **This method returns a string if there is only one value.**
+          This is to support the most common  case for most response
+          headers; i.e., a single value. This reduces the occurrence of
+          the idiom `getHeader('field-name')[0]`. If consumers require the
+          return to be an array regardless of the number of values, they
+          may cast the return to `(array)`.
 
-            - **Cookies are always returned as strings.** This is to keep the
-              return types consistent for all headers, such that the returned
-              values can be used directly in [`header()`][] calls if needed. In
-              practical terms, the implementation should use
-              `getCookiesAsStrings()` as the source for `set-cookie` values.
+        - **Cookies are always returned as strings.** This is to keep the
+          return types consistent for all headers, such that the returned
+          values can be used directly in [`header()`][] calls if needed. In
+          practical terms, the implementation should use
+          `getCookiesAsStrings()` as the source for `set-cookie` values.
 
-    - ```php
-      public function unsetHeader(response_header_field_string $field) : void;
-      ```
-        - Removes a header entirely.
+- ```php
+  public function unsetHeader(response_header_field_string $field) : void;
+  ```
+    - Removes a header entirely.
 
-    - ```php
-      public function hasHeaders() : bool;
-      ```
-        - Reports if any headers exist.
+- ```php
+  public function hasHeaders() : bool;
+  ```
+    - Reports if any headers exist.
 
-    - ```php
-      public function getHeaders() : response_headers_array;
-      ```
-        - Returns an array of all `$value`s of all headers, keyed by the
-        header field.
+- ```php
+  public function getHeaders() : response_headers_array;
+  ```
+    - Returns an array of all `$value`s of all headers, keyed by the
+    header field.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MUST use a string if there is only one `$value`
-              for a header.
+        - Implementations MUST use a string if there is only one `$value`
+          for a header.
 
-            - Implementations MUST use an array of strings if there is more
-              than one `$value` for a header.
+        - Implementations MUST use an array of strings if there is more
+          than one `$value` for a header.
 
-        - Notes:
+    - Notes:
 
-            - **Cookies are always returned as strings.** This is to keep the
-              return types consistent for all headers, such that the returned
-              values can be used directly in [`header()`][] calls if needed. In
-              practical terms, the implementation should use
-              `getCookiesAsStrings()` as the source for `set-cookie` values.
+        - **Cookies are always returned as strings.** This is to keep the
+          return types consistent for all headers, such that the returned
+          values can be used directly in [`header()`][] calls if needed. In
+          practical terms, the implementation should use
+          `getCookiesAsStrings()` as the source for `set-cookie` values.
 
-    - ```php
-      public function unsetHeaders() : void;
-      ```
-        - Removes all headers.
+- ```php
+  public function unsetHeaders() : void;
+  ```
+    - Removes all headers.
 
-    - ```php
-      public function setCookie(
-          response_cookie_name_string $name,
-          response_cookie_value_string $value,
-          response_cookie_attributes_array $attributes = [],
-      ) : void;
-      ```
-        - Sets a named cookie as a `response_cookie_array`, replacing any
-        existing cookie of the same name.
+- ```php
+  public function setCookie(
+      response_cookie_name_string $name,
+      response_cookie_value_string $value,
+      response_cookie_attributes_array $attributes = [],
+  ) : void;
+  ```
+    - Sets a named cookie as a `response_cookie_array`, replacing any
+    existing cookie of the same name.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MUST retain the cookie such that it can be
-              retrieved by name (e.g. via `getCookieAsArray()` or
-              `getCookieAsString()`).
+        - Implementations MUST retain the cookie such that it can be
+          retrieved by name (e.g. via `getCookieAsArray()` or
+          `getCookieAsString()`).
 
-            - Implementations MUST NOT encode the arguments.
+        - Implementations MUST NOT encode the arguments.
 
-    - ```php
-      public function hasCookie(response_cookie_name_string $name) : bool;
-      ```
-        - Reports if a named cookie exists.
+- ```php
+  public function hasCookie(response_cookie_name_string $name) : bool;
+  ```
+    - Reports if a named cookie exists.
 
-    - ```php
-      public function getCookieAsArray(
-          response_cookie_name_string $name,
-      ) : ?response_cookie_array;
-      ```
-        - Returns a named cookie as a `response_cookie_array`, or `null` if it
-        does not exist.
+- ```php
+  public function getCookieAsArray(
+      response_cookie_name_string $name,
+  ) : ?response_cookie_array;
+  ```
+    - Returns a named cookie as a `response_cookie_array`, or `null` if it
+    does not exist.
 
-        - Directives:
+    - Directives:
 
-            - Implementations retaining the cookie as a
-              `response_header_value_string` MUST convert it to a
-              `response_cookie_array` via the [_ResponseCookieHelperService_][]
-              method `parseResponseCookieString()`.
+        - Implementations retaining the cookie as a
+          `response_header_value_string` MUST convert it to a
+          `response_cookie_array` via the [_ResponseCookieHelperService_][]
+          method `parseResponseCookieString()`.
 
-    - ```php
-      public function getCookieAsString(
-          response_cookie_name_string $name,
-      ) : ?response_header_value_string;
-      ```
-        - Returns a named cookie as a string suitable for use as a header
-        value, or `null` if it does not exist.
+- ```php
+  public function getCookieAsString(
+      response_cookie_name_string $name,
+  ) : ?response_header_value_string;
+  ```
+    - Returns a named cookie as a string suitable for use as a header
+    value, or `null` if it does not exist.
 
-        - Directives:
+    - Directives:
 
-            - Implementations retaining the cookie as a
-              `response_cookie_array` MUST convert it to a
-              `response_header_value_string` via the
-              [_ResponseCookieHelperService_][] method
-              `composeResponseCookieString()`.
+        - Implementations retaining the cookie as a
+          `response_cookie_array` MUST convert it to a
+          `response_header_value_string` via the
+          [_ResponseCookieHelperService_][] method
+          `composeResponseCookieString()`.
 
-    - ```php
-      public function unsetCookie(response_cookie_name_string $name) : void;
-      ```
-        - Removes a named cookie.
+- ```php
+  public function unsetCookie(response_cookie_name_string $name) : void;
+  ```
+    - Removes a named cookie.
 
-        - Notes:
+    - Notes:
 
-            - **This is not the same as deleting a cookie from the browser.**
-              To do that, consumers need to send a named cookie with an
-              expiration date in the past.
+        - **This is not the same as deleting a cookie from the browser.**
+          To do that, consumers need to send a named cookie with an
+          expiration date in the past.
 
-    - ```php
-      public function hasCookies() : bool;
-      ```
-        - Reports if any cookies exist.
+- ```php
+  public function hasCookies() : bool;
+  ```
+    - Reports if any cookies exist.
 
-    - ```php
-      public function getCookiesAsArrays() : response_named_cookie_arrays;
-      ```
-        - Returns all cookies as an array where each key is the cookie name
-        and each value is its `response_cookie_array`.
+- ```php
+  public function getCookiesAsArrays() : response_named_cookie_arrays;
+  ```
+    - Returns all cookies as an array where each key is the cookie name
+    and each value is its `response_cookie_array`.
 
-        - Directives:
+    - Directives:
 
-           - Implementations retaining a cookie as a
-             `response_header_value_string` MUST represent that cookie as if
-             it had been retrieved via the `getCookieAsArray()` method.
+       - Implementations retaining a cookie as a
+         `response_header_value_string` MUST represent that cookie as if
+         it had been retrieved via the `getCookieAsArray()` method.
 
-    - ```php
-      public function getCookiesAsStrings() : response_named_cookie_strings;
-      ```
-        - Returns all cookies as an array where each key is the cookie name
-        and each value is its `response_header_value_string`.
+- ```php
+  public function getCookiesAsStrings() : response_named_cookie_strings;
+  ```
+    - Returns all cookies as an array where each key is the cookie name
+    and each value is its `response_header_value_string`.
 
-        - Directives:
+    - Directives:
 
-            - Implementations retaining a cookie as a `response_cookie_array`
-              MUST represent that cookie as if it had been retrieved via the
-              `getCookieAsString()` method.
+        - Implementations retaining a cookie as a `response_cookie_array`
+          MUST represent that cookie as if it had been retrieved via the
+          `getCookieAsString()` method.
 
-    - ```php
-      public function unsetCookies() : void;
-      ```
-        - Removes the `set-cookie` header entirely.
+- ```php
+  public function unsetCookies() : void;
+  ```
+    - Removes the `set-cookie` header entirely.
 
-        - Notes:
+    - Notes:
 
-            - **This is not the same as deleting all cookies from the
-              browser.** To do that, consumers need to send named cookies with
-              expiration dates in the past.
+        - **This is not the same as deleting all cookies from the
+          browser.** To do that, consumers need to send named cookies with
+          expiration dates in the past.
 
 ### _ResponseBodyHandler_
 
@@ -364,44 +364,44 @@ non-string, resource-intensive, or header-modifying content.
       here. Implementors are encouraged to publish their implementations for
       shared use.
 
-- Methods:
+#### _ResponseBodyHandler_ Methods
 
-    - ```php
-      public function prepareResponse(ResponseStruct $response) : void;
-      ```
-        - Modifies the `$response` as appropriate for the body content.
+- ```php
+  public function prepareResponse(ResponseStruct $response) : void;
+  ```
+    - Modifies the `$response` as appropriate for the body content.
 
-        - Notes:
+    - Notes:
 
-            - **The content source or implementation may carry information relevant
-              to the rest of the response.** These may include values related to:
+        - **The content source or implementation may carry information relevant
+          to the rest of the response.** These may include values related to:
 
-                - the `content-type` header and its `charset` parameter
-                - the `content-encoding` header
-                - an `etag` string
-                - a `last-modified` time
-                - the status code
-                - and so on.
+            - the `content-type` header and its `charset` parameter
+            - the `content-encoding` header
+            - an `etag` string
+            - a `last-modified` time
+            - the status code
+            - and so on.
 
-              Such information might best be recorded in the response only at the
-              time of sending. This method affords the opportunity to do so in a
-              content-specific fashion.
+          Such information might best be recorded in the response only at the
+          time of sending. This method affords the opportunity to do so in a
+          content-specific fashion.
 
-    - ```php
-      public function sendResponseBody(ResponseSenderService $sender) : void;
-      ```
-        - Sends the body content of the response.
+- ```php
+  public function sendResponseBody(ResponseSenderService $sender) : void;
+  ```
+    - Sends the body content of the response.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MUST send the body content using the `$sender`.
+        - Implementations MUST send the body content using the `$sender`.
 
-        - Notes:
+    - Notes:
 
-            - **Send the body via the `$sender`, not by using `echo` or some
-              other means.** This allows the sending logic to specify the output
-              destination. The `$sender` provides afforances for sending strings
-              and resources (whether in whole or in part).
+        - **Send the body via the `$sender`, not by using `echo` or some
+          other means.** This allows the sending logic to specify the output
+          destination. The `$sender` provides affordances for sending strings
+          and resources (whether in whole or in part).
 
 ### _ResponseCookieHelperService_
 
@@ -417,193 +417,194 @@ ways:
 The [_ResponseCookieHelperService_][] affords conversion between the two
 representations.
 
-- Methods:
+#### _ResponseCookieHelperService_ Methods
 
-    - ```php
-      public function parseResponseCookieString(
-          response_header_value_string $setCookieString,
-      ) : ?response_cookie_array;
-      ```
-        - Parses a `response_header_value_string` into a `response_cookie_array`.
+- ```php
+  public function parseResponseCookieString(
+      response_header_value_string $setCookieString,
+  ) : ?response_cookie_array;
+  ```
+    - Parses a `response_header_value_string` into a `response_cookie_array`.
 
-        - Directives:
-            - Implementations MUST use a parsing algorithm equivalent to the one in
-              [RFC 6265][] section 5.2.
+    - Directives:
+        - Implementations MUST use a parsing algorithm equivalent to the one in
+          [RFC 6265][] section 5.2.
 
-            - Implementations MAY ignore the attribute-specific parsing and validating
-              algorithms in [RFC 6265][] sections 5.2.1 et al.
+        - Implementations MAY ignore the attribute-specific parsing and validating
+          algorithms in [RFC 6265][] sections 5.2.1 et al.
 
-            - Implementations MAY validate parsed attributes; implementations doing so
-              MUST treat invalid attributes as missing.
+        - Implementations MAY validate parsed attributes; implementations doing so
+          MUST treat invalid attributes as missing.
 
-            - Implementations MUST return `null` when the parsed `<name-value-pair>`
-              lacks a `%x3D` (`=`) character, or when the parsed cookie name is empty.
+        - Implementations MUST return `null` when the parsed `<name-value-pair>`
+          lacks a `%x3D` (`=`) character, or when the parsed cookie name is empty.
 
-            - Implementations MUST decode the parsed cookie name and value
-              appropriately.
+        - Implementations MUST decode the parsed cookie name and value
+          appropriately.
 
-            - Implementations MUST normalize parsed attribute names to lower case.
+        - Implementations MUST normalize parsed attribute names to lower case.
 
-            - Implementations MUST represent the value of attributes specified without
-              `=<attribute-value>` as boolean `true`.
+        - Implementations MUST represent the value of attributes specified without
+          `=<attribute-value>` as boolean `true`.
 
-        - Notes:
+    - Notes:
 
-            - **These directives are specific but non-restrictive.** For example,
-              cookie attributes other than the ones found in [RFC 6265][] may be parsed
-              and captured into the `response_cookie_array`, such as `SameSite` and
-              `Partitioned`.
+        - **These directives are specific but non-restrictive.** For example,
+          cookie attributes other than the ones found in [RFC 6265][] may be parsed
+          and captured into the `response_cookie_array`, such as `SameSite` and
+          `Partitioned`.
 
-            - **The parsed cookie name and value are to be decoded.** Typically
-              this means using [`urldecode()`][].
+        - **The parsed cookie name and value are to be decoded.** Typically
+          this means using [`urldecode()`][].
 
-            - **Some attributes do not have values.** For example, the `HttpOnly`
-              attribute is defined as having no accompanying value (i.e., it has no
-              `=<attribute-value>` portion). Thus, if `HttpOnly` is present in the
-              `response_header_value_string` as an attribute, its corresponding
-              `response_cookie_array` element must be represented as
-              `['httponly' => true]`. If it is not present as an attribute, it is
-              missing, and thus should not be present in the `response_cookie_array`.
+        - **Some attributes do not have values.** For example, the `HttpOnly`
+          attribute is defined as having no accompanying value (i.e., it has no
+          `=<attribute-value>` portion). Thus, if `HttpOnly` is present in the
+          `response_header_value_string` as an attribute, its corresponding
+          `response_cookie_array` element must be represented as
+          `['httponly' => true]`. If it is not present as an attribute, it is
+          missing, and thus should not be present in the `response_cookie_array`.
 
-              Note that this is different from an attribute having an empty value.
-              For example, `expires=;` has an empty value, and so should be
-              represented as an empty string: `['expires' => '']`. (This is an
-              invalid value for `expires` and so implementations may treat it as
-              missing.)
+          Note that this is different from an attribute having an empty value.
+          For example, `expires=;` has an empty value, and so should be
+          represented as an empty string: `['expires' => '']`. (This is an
+          invalid value for `expires` and so implementations may treat it as
+          missing.)
 
-    - ```php
-      public function composeResponseCookieString(
-          response_cookie_array $cookie,
-      ) : response_header_value_string;
-      ```
-        - Composes a `response_cookie_array` into a `response_header_value_string`.
+- ```php
+  public function composeResponseCookieString(
+      response_cookie_array $cookie,
+  ) : response_header_value_string;
+  ```
+    - Composes a `response_cookie_array` into a `response_header_value_string`.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MUST encode the cookie name and value
-              appropriately.
+        - Implementations MUST encode the cookie name and value
+          appropriately.
 
-            - Implementations SHOULD use lower case for attribute names but MAY use any
-              other case approved in the relevant RFCs.
+        - Implementations SHOULD use lower case for attribute names but MAY use any
+          other case approved in the relevant RFCs.
 
-            - Implementations MUST omit `=<attribute-value>` when the attribute value
-              is boolean `true`.
+        - Implementations MUST omit `=<attribute-value>` when the attribute value
+          is boolean `true`.
 
-        - Notes:
+    - Notes:
 
-            - **These directives are specific but non-restrictive.** For example,
-              cookie attributes other than the ones found in [RFC 6265][] may be
-              composed into the `response_header_value_string`, such as `SameSite`
-              and `Partitioned`.
+        - **These directives are specific but non-restrictive.** For example,
+          cookie attributes other than the ones found in [RFC 6265][] may be
+          composed into the `response_header_value_string`, such as `SameSite`
+          and `Partitioned`.
 
-            - **The cookie name and value are to be encoded.** Typically this
-              means using [`urlencode()`][].
+        - **The cookie name and value are to be encoded.** Typically this
+          means using [`urlencode()`][].
 
 ### _ResponseSenderService_
 
 The [_ResponseSenderService_][] affords sending the server response.
 
-- Methods:
+#### _ResponseSenderService_ Methods
 
-    - ```php
-      public function sendResponse(ResponseStruct $response) : void;
-      ```
-        - Sends the entire response, including the status line, headers, and body.
+- ```php
+  public function sendResponse(ResponseStruct $response) : void;
+  ```
+    - Sends the entire response, including the status line, headers, and body.
 
-        - Directives:
+    - Directives:
 
-            - Implementations MAY check to see if the response can be sent; when
-              doing so, implementations MUST throw a [_ResponseThrowable_][] if
-              the response cannot be sent.
+        - Implementations MAY check to see if the response can be sent; when
+          doing so, implementations MUST throw a [_ResponseThrowable_][] if
+          the response cannot be sent.
 
-            - If the [_ResponseStruct_][] `$body` is an instance of
-              [_ResponseBodyHandler_][], implementations MUST call its
-              `prepareResponse()` method before sending anything.
+        - If the [_ResponseStruct_][] `$body` is an instance of
+          [_ResponseBodyHandler_][], implementations MUST call its
+          `prepareResponse()` method before sending anything.
 
-            - Implementations SHOULD use [`header()`][] to send headers, but MAY
-              use some other mechanism.
+        - Implementations SHOULD use [`header()`][] to send headers, but MAY
+          use some other mechanism.
 
-            - Implementations SHOULD send header fields in lower case, but MAY
-              send header fields in some other RFC-approved case.
+        - Implementations SHOULD send header fields in lower case, but MAY
+          send header fields in some other RFC-approved case.
 
-    - ```php
-      public function sendResponseBodyString(Stringable|string $content) : void;
-      ```
-        - Sends body content from a string.
+- ```php
+  public function sendResponseBodyString(Stringable|string $content) : void;
+  ```
+    - Sends body content from a string.
 
-        - Directives:
+    - Directives:
 
-            - Implementations SHOULD write the string to the `php://output`
-              stream, but MAY use some other mechanism or destination.
+        - Implementations SHOULD write the string to the `php://output`
+          stream, but MAY use some other mechanism or destination.
 
-        - Notes:
+    - Notes:
 
-            - **Prefer writing to a resource over calling `echo`, `print`,
-              etc.** Although echoing a body string is the single most common
-              use case, calling `fwrite()` with a `php://output` resource does
-              exactly the same thing. This also allows specifying the output
-              destination at call-time, such as when testing.
+        - **Prefer writing to a resource over calling `echo`, `print`,
+          etc.** Although echoing a body string is the single most common
+          use case, calling `fwrite()` with a `php://output` resource does
+          exactly the same thing. This also allows specifying the output
+          destination at call-time, such as when testing.
 
-    - ```php
-      public function sendResponseBodyResource(
-          resource $content,
-          ?int $length = null,
-          ?int $offset = null,
-      ) : int;
-      ```
-        - Sends body content from a resource.
+- ```php
+  public function sendResponseBodyResource(
+      resource $content,
+      ?int $length = null,
+      ?int $offset = null,
+  ) : int;
+  ```
+    - Sends body content from a resource.
 
-        - Directives:
+    - Directives:
 
-            - Implementations SHOULD write the resource to the `php://output`
-              stream, but MAY use some other mechanism or destination.
+        - Implementations SHOULD send the `$content` to the `php://output`
+          stream, but MAY use some other mechanism or destination.
 
-            - If the `$offset` is null, implementations MUST begin reading
-              from the current `$content` pointer position.
+        - If the `$offset` is null, implementations MUST begin reading
+          from the current `$content` pointer position.
 
-            - If the `$offset` is zero or positive, implementations MUST begin
-              reading from the `$content` starting at that byte; implementations
-              MAY move the pointer as needed, e.g. via [`fseek()`][].
+        - If the `$offset` is zero or positive, implementations MUST begin
+          reading from the `$content` starting at that byte; implementations
+          MAY move the pointer as needed, e.g. via [`fseek()`][].
 
-            - If the `$length` is null, implementations MUST send all remaining
-              bytes from the `$content` resource.
+        - If the `$length` is null, implementations MUST send all remaining
+          bytes from the `$content`.
 
-            - If the `$length` is not null, implementations MUST send that many
-              bytes from the resource, or up to the end of the resource.
+        - If the `$length` is not null, implementations MUST send that many
+          bytes from the `$content` (or all remaining bytes from the `$content`,
+          whichever comes first).
 
-            - Implementations MUST return the number of bytes sent.
+        - Implementations MUST return the number of bytes sent.
 
-            - Implementations MUST throw a [_ResponseThrowable_][] on failure.
+        - Implementations MUST throw a [_ResponseThrowable_][] on failure.
 
-        - Notes:
+    - Notes:
 
-            - **The method signature is subtly different from related streaming
-              functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
-              to `$offset = 0`, and [`stream_get_contents()`] defaults to
-              `-1`, the default here is `null`.
+        - **The method signature is subtly different from related streaming
+          functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
+          to `$offset = 0`, and [`stream_get_contents()`] defaults to
+          `-1`, the default here is `null`.
 
-            - **By default, do not move the starting pointer position.** Some
-              implementations attempt to [`rewind()`][] the resource before
-              sending. When sending a complete file, that may be fine; however,
-              it may be necessary to start at exactly where the resource pointer
-              already is. Therefore, do not change the pointer starting position
-              when the `$offset` is null.
+        - **By default, do not move the starting pointer position.** Some
+          implementations attempt to [`rewind()`][] the resource before
+          sending. When sending a complete file, that may be fine; however,
+          it may be necessary to start at exactly where the resource pointer
+          already is. Therefore, do not change the pointer starting position
+          when the `$offset` is null.
 
-            - **An `$offset` of `0` is the equivalent of rewind-before-send.**
-              To indicate a [`rewind()`][] or its equivalent is needed before
-              sending, consumers should specify an `$offset` of `0`.
-              Alternatively, consumers might [`rewind()`][] the resource
-              themselves before sending.
+        - **An `$offset` of `0` is the equivalent of rewind-before-send.**
+          To indicate a [`rewind()`][] or its equivalent is needed before
+          sending, consumers should specify an `$offset` of `0`.
+          Alternatively, consumers might [`rewind()`][] the resource
+          themselves before sending.
 
-    - ```php
-      public function flushResponse() : void;
-      ```
-        - Flushes the system output buffer.
+- ```php
+  public function flushResponse() : void;
+  ```
+    - Flushes the system output buffer.
 
-        - Notes:
+    - Notes:
 
-            - **This is an equivalent to [`flush()`][].** It may be useful when
-              sending content with `Transfer-Encoding: chunked`.
+        - **This is an equivalent to [`flush()`][].** It may be useful when
+          sending content with `Transfer-Encoding: chunked`.
 
 ### _ResponseThrowable_
 

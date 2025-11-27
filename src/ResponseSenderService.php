@@ -58,7 +58,7 @@ interface ResponseSenderService
      *
      * - Directives:
      *
-     *     - Implementations SHOULD write the resource to the `php://output`
+     *     - Implementations SHOULD send the `$content` to the `php://output`
      *       stream, but MAY use some other mechanism or destination.
      *
      *     - If the `$offset` is null, implementations MUST begin reading
@@ -69,10 +69,11 @@ interface ResponseSenderService
      *       MAY move the pointer as needed, e.g. via [`fseek()`][].
      *
      *     - If the `$length` is null, implementations MUST send all remaining
-     *       bytes from the `$content` resource.
+     *       bytes from the `$content`.
      *
      *     - If the `$length` is not null, implementations MUST send that many
-     *       bytes from the resource, or up to the end of the resource.
+     *       bytes from the `$content` (or all remaining bytes from the `$content`,
+     *       whichever comes first).
      *
      *     - Implementations MUST return the number of bytes sent.
      *
