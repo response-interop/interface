@@ -243,7 +243,7 @@ the response, including affordances for cookie management.
       public function setCookie(
           response_cookie_name_string $name,
           response_cookie_value_string $value,
-          response_cookie_attributes_array $attributes,
+          response_cookie_attributes_array $attributes = [],
       ) : void;
       ```
         - Sets a named cookie as a `response_cookie_array`, replacing any
@@ -485,7 +485,7 @@ representations.
               appropriately.
 
             - Implementations SHOULD use lower case for attribute names but MAY use any
-              other case approved in the relvant RFCs.
+              other case approved in the relevant RFCs.
 
             - Implementations MUST omit `=<attribute-value>` when the attribute value
               is boolean `true`.
@@ -509,7 +509,7 @@ The [_ResponseSenderService_][] affords sending the server response.
     - ```php
       public function sendResponse(ResponseStruct $response) : void;
       ```
-        - Sends the response.
+        - Sends the entire response, including the status line, headers, and body.
 
         - Directives:
 
@@ -548,8 +548,8 @@ The [_ResponseSenderService_][] affords sending the server response.
     - ```php
       public function sendResponseBodyResource(
           resource $content,
-          ?int $length,
-          ?int $offset,
+          ?int $length = null,
+          ?int $offset = null,
       ) : int;
       ```
         - Sends body content from a resource.
