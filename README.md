@@ -28,11 +28,10 @@ This package defines the following interfaces:
 
 - [_ResponseSenderService_][] affords sending the server response.
 
-Response-Interop also defines a marker interface, [_ResponseThrowable_][], for
-marking an [_Exception_][] as response-related.
+- [_ResponseThrowable_][] extends [_Throwable_][] to mark an [_Exception_][] as
+  response-related.
 
-Finally, Response-Interop defines a [_ResponseTypeAliases_][] interface with
-PHPStan types to aid static analysis.
+- [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static analysis.
 
 Notes:
 
@@ -613,8 +612,8 @@ The [_ResponseThrowable_][] interface extends [_Throwable_][] to mark an
 
 ### _ResponseTypeAliases_
 
-The [_ResponseTypeAliases_][] interface defines these PHPStan type aliases to
-aid static analysis:
+The [_ResponseTypeAliases_][] interface provides PHPStan type aliases to
+aid static analysis.
 
 - ```
   response_cookie_array array{
@@ -685,12 +684,14 @@ aid static analysis:
 
 ## Implementations
 
-Implementations MAY define additional class members not defined in these
+- Directives:
+
+    - Implementations MAY define additional class members not defined in these
 interfaces.
 
-Notes:
+- Notes:
 
-- **Reference implementations** may be found at <https://github.com/response-interop/impl>.
+    - **Reference implementations** may be found at <https://github.com/response-interop/impl>.
 
 ## Q & A
 
