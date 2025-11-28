@@ -291,13 +291,13 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyHandler_]: #response-body-content
-[_ResponseCookieHelperService_]: #response-cookie-helper-service
-[_ResponseHeadersCollection_]: #response-headers-collection
-[_ResponseSenderService_]: #response-sender-service
-[_ResponseStruct_]: #response-struct
-[_ResponseThrowable_]: #response-throwable
-[_ResponseTypeAliases_]: #response-type-aliases
+[_ResponseBodyHandler_]: #responsebodycontent
+[_ResponseCookieHelperService_]: #responsecookiehelperservice
+[_ResponseHeadersCollection_]: #responseheaderscollection
+[_ResponseSenderService_]: #responsesenderservice
+[_ResponseStruct_]: #responsestruct
+[_ResponseThrowable_]: #responsethrowable
+[_ResponseTypeAliases_]: #responsetypealiases
 [_Throwable_]: https://php.net/Throwable
 [`flush()`]: https://php.net/flush
 [`fseek()`]: https://php.net/fseek
@@ -311,6 +311,6 @@ not specify affordances for other behaviors.
 [`urldecode()`]: https://php.net/urldecode
 [`urlencode()`]: https://php.net/urlencode
 [BCP 14]: https://www.rfc-editor.org/info/bcp14
-[RFC 2119]: https://www.rfc-editor.org/rfc/rfc2119.txt
+[RFC 2119]: https://datatracker.ietf.org/doc/html/rfc2119
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265
-[RFC 8174]: https://www.rfc-editor.org/rfc/rfc8174.txt
+[RFC 8174]: https://datatracker.ietf.org/doc/html/rfc8174
