@@ -3,8 +3,8 @@
 Response-Interop is based on research including the following projects, which model their server-side response objects on buffered versions of PHP functions:
 
 - [aura/web](https://github.com/auraphp/Aura.Web/blob/2.x/src/Response.php) (aura)
-- Cake 2 _CakeResponse_ (cake2)
-- Code Igniter 3 _CI_Output_ (ci3)
+- [Cake 2 _CakeResponse_](https://github.com/pieceofcake2/cakephp/blob/2.x/src/Network/CakeResponse.php) (cake2)
+- [Code Igniter 3 _CI_Output_](https://github.com/bcit-ci/CodeIgniter/blob/3.1-stable/system/core/Output.php) (ci3)
 - [flightphp/core](https://github.com/flightphp/core/blob/master/flight/net/Response.php) (flight)
 - [horde/controller](https://github.com/horde/Controller/blob/horde_controller2/lib/Horde/Controller/Response.php) (horde)
 - [Klein](https://github.com/klein/klein.php/blob/master/src/Klein/AbstractResponse.php) (klein)
