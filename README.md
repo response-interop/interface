@@ -3,8 +3,8 @@
 This package provides interoperable interfaces to encapsulate, buffer, and send
 server-side response values in PHP 8.4 or later, in order to reduce the global
 mutable state and inspection problems that exist with the PHP response-sending
-functions. It reflects, resolves, and refines the common practices of over a
-dozen different userland projects.
+functions. It reflects, refines, and reconciles the common practices identified
+within [several pre-existing projects][README-RESEARCH.md].
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
