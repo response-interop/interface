@@ -1,10 +1,10 @@
 # Response-Interop Interface Package
 
-This package provides interoperable interfaces to encapsulate, buffer, and send
-server-side response values in PHP 8.4 or later, in order to reduce the global
-mutable state and inspection problems that exist with the PHP response-sending
-functions. It reflects, refines, and reconciles the common practices identified
-within [several pre-existing projects][README-RESEARCH.md].
+Response-Interop provides an interoperable package of standard interfaces to
+encapsulate, buffer, and send server-side response values in PHP 8.4 or later,
+in order to reduce the global mutable state and inspection problems that exist
+with the PHP response-sending functions. It reflects, refines, and reconciles
+the common practices identified within [several pre-existing projects](./README-RESEARCH.md).
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
@@ -14,22 +14,19 @@ interpreted as described in [BCP 14][] ([RFC 2119][], [RFC 8174][]).
 
 This package defines the following interfaces:
 
-- [_ResponseStruct_][] encapsulates the server response status line, headers,
-  and body.
+- [_ResponseStruct_][] encapsulates the server response.
 
-- [_ResponseHeadersCollection_][] encapsulates the headers for the response,
-  including affordances for cookie management.
+- [_ResponseHeadersCollection_][] encapsulates the headers for the response, including affordances for cookie management.
 
-- [_ResponseBodyHandler_][] affords management of non-string,
-  resource-intensive, or header-modifying content.
+- [_ResponseBodyHandler_][] affords management of non-string, resource-intensive, or header-modifying content.
 
-- [_ResponseCookieHelperService_][] affords conversion of cookie representations
-  to and from strings and arrays.
+- [_ResponseCookieHelperService_][] affords representing `set-cookie` header values.
 
-- [_ResponseSenderService_][] affords sending the server response.
+- [_ResponseSenderService_][] affords sending the response.
 
-- [_ResponseThrowable_][] extends [_Throwable_][] to mark an [_Exception_][] as
-  response-related.
+- [_ResponseBodySenderService_][] affords sending the response body.
+
+- [_ResponseThrowable_][] extends [_Throwable_][] to mark an [_Exception_][] as response-related.
 
 - [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static analysis.
 
@@ -45,7 +42,7 @@ Notes:
 
 ### _ResponseStruct_
 
-The [_ResponseStruct_][] interface encapsulates the server response.
+[_ResponseStruct_][] encapsulates the server response.
 
 #### _ResponseStruct_ Properties
 
@@ -90,8 +87,8 @@ The [_ResponseStruct_][] interface encapsulates the server response.
 
 ### _ResponseHeadersCollection_
 
-The [_ResponseHeadersCollection_][] interface encapsulates the headers for
-the response, including affordances for cookie management.
+[_ResponseHeadersCollection_][] encapsulates the headers for the response,
+including affordances for cookie management.
 
 - Directives:
 
@@ -345,8 +342,8 @@ the response, including affordances for cookie management.
 
 ### _ResponseBodyHandler_
 
-The [_ResponseBodyHandler_][] interface affords management and sending of
-non-string, resource-intensive, or header-modifying content.
+[_ResponseBodyHandler_][] affords management of non-string,
+resource-intensive, or header-modifying content.
 
 - Notes:
 
@@ -388,7 +385,7 @@ non-string, resource-intensive, or header-modifying content.
           content-specific fashion.
 
 - ```php
-  public function sendResponseBody(ResponseSenderService $sender) : void;
+  public function sendResponseBody(ResponseBodySenderService $bodySender) : void;
   ```
     - Sends the body content of the response.
 
@@ -405,17 +402,16 @@ non-string, resource-intensive, or header-modifying content.
 
 ### _ResponseCookieHelperService_
 
-Response-Interop affords representing `set-cookie` header values in two
-ways:
+[_ResponseCookieHelperService_][] affords representing `set-cookie` header
+values.
+
+It does so in two ways, allowing conversion between two representations:
 
 - as a `response_header_value_string`, for working with complete `set-cookie`
   header strings; and,
 
 - as a `response_cookie_array`, for working with `set-cookie` components
   more conveniently.
-
-The [_ResponseCookieHelperService_][] affords conversion between the two
-representations.
 
 #### _ResponseCookieHelperService_ Methods
 
@@ -501,7 +497,7 @@ representations.
 
 ### _ResponseSenderService_
 
-The [_ResponseSenderService_][] affords sending the server response.
+[_ResponseSenderService_][] affords sending the response.
 
 #### _ResponseSenderService_ Methods
 
@@ -525,6 +521,15 @@ The [_ResponseSenderService_][] affords sending the server response.
 
         - Implementations SHOULD send header fields in lower case, but MAY
           send header fields in some other RFC-approved case.
+
+        - Implementations MAY "finish" or "close" the request after sending
+          the response.
+
+### _ResponseBodySenderService_
+
+[_ResponseBodySenderService_][] affords sending the response body.
+
+#### _ResponseBodySenderService_ Methods
 
 - ```php
   public function sendResponseBodyString(Stringable|string $content) : void;
@@ -558,17 +563,17 @@ The [_ResponseSenderService_][] affords sending the server response.
         - Implementations SHOULD send the `$content` to the `php://output`
           stream, but MAY use some other mechanism or destination.
 
-        - If the `$offset` is null, implementations MUST begin reading
+        - If the `$offset` is `null`, implementations MUST begin reading
           from the current `$content` pointer position.
 
         - If the `$offset` is zero or positive, implementations MUST begin
           reading from the `$content` starting at that byte; implementations
           MAY move the pointer as needed, e.g. via [`fseek()`][].
 
-        - If the `$length` is null, implementations MUST send all remaining
+        - If the `$length` is `null`, implementations MUST send all remaining
           bytes from the `$content`.
 
-        - If the `$length` is not null, implementations MUST send that many
+        - If the `$length` is not `null`, implementations MUST send that many
           bytes from the `$content` (or all remaining bytes from the `$content`,
           whichever comes first).
 
@@ -588,7 +593,7 @@ The [_ResponseSenderService_][] affords sending the server response.
           sending. When sending a complete file, that may be fine; however,
           it may be necessary to start at exactly where the resource pointer
           already is. Therefore, do not change the pointer starting position
-          when the `$offset` is null.
+          when the `$offset` is `null`.
 
         - **An `$offset` of `0` is the equivalent of rewind-before-send.**
           To indicate a [`rewind()`][] or its equivalent is needed before
@@ -608,13 +613,15 @@ The [_ResponseSenderService_][] affords sending the server response.
 
 ### _ResponseThrowable_
 
-The [_ResponseThrowable_][] interface extends [_Throwable_][] to mark an
-[_Exception_][] as response-related. It adds no class members.
+[_ResponseThrowable_][] extends [_Throwable_][] to mark an [_Exception_][] as
+response-related.
+
+It adds no class members.
 
 ### _ResponseTypeAliases_
 
-The [_ResponseTypeAliases_][] interface provides PHPStan type aliases to
-aid static analysis.
+[_ResponseTypeAliases_][] provides PHPStan type aliases to aid static
+analysis.
 
 - ```
   response_cookie_array array{
@@ -688,7 +695,7 @@ aid static analysis.
 - Directives:
 
     - Implementations MAY define additional class members not defined in these
-interfaces.
+      interfaces.
 
 - Notes:
 
@@ -928,7 +935,8 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyHandler_]: #responsebodycontent
+[_ResponseBodyHandler_]: #responsebodyhandler
+[_ResponseBodySenderService_]: #responsebodysenderservice
 [_ResponseCookieHelperService_]: #responsecookiehelperservice
 [_ResponseHeadersCollection_]: #responseheaderscollection
 [_ResponseSenderService_]: #responsesenderservice

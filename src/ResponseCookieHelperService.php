@@ -4,17 +4,16 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * Response-Interop affords representing `set-cookie` header values in two
- * ways:
+ * [_ResponseCookieHelperService_][] affords representing `set-cookie` header
+ * values.
+ *
+ * It does so in two ways, allowing conversion between two representations:
  *
  * - as a `response_header_value_string`, for working with complete `set-cookie`
  *   header strings; and,
  *
  * - as a `response_cookie_array`, for working with `set-cookie` components
  *   more conveniently.
- *
- * The [_ResponseCookieHelperService_][] affords conversion between the two
- * representations.
  *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
  * @phpstan-import-type response_header_value_string from ResponseTypeAliases

@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * The [_ResponseHeadersCollection_][] interface encapsulates the headers for
- * the response, including affordances for cookie management.
+ * [_ResponseHeadersCollection_][] encapsulates the headers for the response,
+ * including affordances for cookie management.
  *
  * - Directives:
  *

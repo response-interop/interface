@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * The [_ResponseBodyHandler_][] interface affords management and sending of
- * non-string, resource-intensive, or header-modifying content.
+ * [_ResponseBodyHandler_][] affords management of non-string,
+ * resource-intensive, or header-modifying content.
  *
  * - Notes:
  *
@@ -60,5 +60,5 @@ interface ResponseBodyHandler
      *       destination. The `$sender` provides affordances for sending strings
      *       and resources (whether in whole or in part).
      */
-    public function sendResponseBody(ResponseSenderService $sender) : void;
+    public function sendResponseBody(ResponseBodySenderService $bodySender) : void;
 }

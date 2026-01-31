@@ -1,10 +1,10 @@
 # Response-Interop Interface Package
 
-This package provides interoperable interfaces to encapsulate, buffer, and send
-server-side response values in PHP 8.4 or later, in order to reduce the global
-mutable state and inspection problems that exist with the PHP response-sending
-functions. It reflects, resolves, and refines the common practices of over a
-dozen different userland projects.
+Response-Interop provides an interoperable package of standard interfaces to
+encapsulate, buffer, and send server-side response values in PHP 8.4 or later,
+in order to reduce the global mutable state and inspection problems that exist
+with the PHP response-sending functions. It reflects, refines, and reconciles
+the common practices identified within [several pre-existing projects](./README-RESEARCH.md).
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
@@ -14,24 +14,7 @@ interpreted as described in [BCP 14][] ([RFC 2119][], [RFC 8174][]).
 
 This package defines the following interfaces:
 
-- [_ResponseStruct_][] encapsulates the server response status line, headers,
-  and body.
-
-- [_ResponseHeadersCollection_][] encapsulates the headers for the response,
-  including affordances for cookie management.
-
-- [_ResponseBodyHandler_][] affords management of non-string,
-  resource-intensive, or header-modifying content.
-
-- [_ResponseCookieHelperService_][] affords conversion of cookie representations
-  to and from strings and arrays.
-
-- [_ResponseSenderService_][] affords sending the server response.
-
-- [_ResponseThrowable_][] extends [_Throwable_][] to mark an [_Exception_][] as
-  response-related.
-
-- [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static analysis.
+{{= list }}
 
 Notes:
 
@@ -50,7 +33,7 @@ Notes:
 - Directives:
 
     - Implementations MAY define additional class members not defined in these
-interfaces.
+      interfaces.
 
 - Notes:
 
@@ -245,7 +228,7 @@ when headers are sent. None the researched projects provided any equivalent
 affordances.
 
 Implementors desiring something similar are encouraged to add such logic as
-necessary, perhaps in the `sendResponseHeaders()` logic.
+necessary, perhaps in the `sendResponse()` logic.
 
 ### Why does _ResponseHeadersCollection_ provide cookie affordance methods?
 
@@ -291,7 +274,8 @@ not specify affordances for other behaviors.
 * * *
 
 [_Exception_]: https://php.net/Throwable
-[_ResponseBodyHandler_]: #responsebodycontent
+[_ResponseBodyHandler_]: #responsebodyhandler
+[_ResponseBodySenderService_]: #responsebodysenderservice
 [_ResponseCookieHelperService_]: #responsecookiehelperservice
 [_ResponseHeadersCollection_]: #responseheaderscollection
 [_ResponseSenderService_]: #responsesenderservice

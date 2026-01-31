@@ -6,10 +6,9 @@ namespace ResponseInterop\Interface;
 use Stringable;
 
 /**
- * The [_ResponseStruct_][] interface encapsulates the server response.
+ * [_ResponseStruct_][] encapsulates the server response.
  *
  * @phpstan-import-type response_http_version_string from ResponseTypeAliases
- *
  * @phpstan-import-type response_status_code_int from ResponseTypeAliases
  */
 interface ResponseStruct
