@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.0.0-beta1
+
+Incororpated one chagne from private review:
+
+- Extracted _ResponseBodySenderService_ from _ResponseBodySender_ to segregate
+  the body-sending methods from the main sending method. _ResponseBodyHandler_
+  method `sendResponseBody()` now takes _ResponseBodySenderService_ as its
+  parameter.
+
+- Updated documentation.
+
 ## 1.0.0-alpha1
 
 Incoporated changes indicated by private review:
@@ -22,4 +33,3 @@ Incoporated changes indicated by private review:
 ## 1.0.0-dev1
 
 First release for private review.
-
