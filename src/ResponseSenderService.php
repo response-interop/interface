@@ -6,8 +6,6 @@ namespace ResponseInterop\Interface;
 /**
  * [_ResponseSenderService_][] affords sending the response.
  *
- * @phpstan-import-type response_header_field_string from ResponseTypeAliases
- * @phpstan-import-type response_header_value_string from ResponseTypeAliases
  */
 interface ResponseSenderService
 {

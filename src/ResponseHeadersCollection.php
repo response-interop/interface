@@ -263,9 +263,9 @@ interface ResponseHeadersCollection
      *
      * - Directives:
      *
-     *    - Implementations retaining a cookie as a
-     *      `response_header_value_string` MUST represent that cookie as if
-     *      it had been retrieved via the `getCookieAsArray()` method.
+     *     - Implementations retaining a cookie as a
+     *       `response_header_value_string` MUST represent that cookie as if
+     *       it had been retrieved via the `getCookieAsArray()` method.
      *
      * @return response_named_cookie_arrays
      */

@@ -8,8 +8,6 @@ use Stringable;
 /**
  * [_ResponseBodySenderService_][] affords sending the response body.
  *
- * @phpstan-import-type response_header_field_string from ResponseTypeAliases
- * @phpstan-import-type response_header_value_string from ResponseTypeAliases
  */
 interface ResponseBodySenderService
 {
@@ -60,7 +58,7 @@ interface ResponseBodySenderService
      * - Notes:
      *
      *     - **The method signature is subtly different from related streaming
-     *       functions in PHP.** Whereas [`stream_copy_to_stream()`] defaults
+     *       functions in PHP.** Whereas [`stream_copy_to_stream()`][] defaults
      *       to `$offset = 0`, and [`stream_get_contents()`] defaults to
      *       `-1`, the default here is `null`.
      *

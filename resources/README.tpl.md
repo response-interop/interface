@@ -7,7 +7,7 @@ with the PHP response-sending functions. It reflects, refines, and reconciles
 the common practices identified within [several pre-existing projects](./README-RESEARCH.md).
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [BCP 14][] ([RFC 2119][], [RFC 8174][]).
 
 ## Interfaces
@@ -22,7 +22,7 @@ Notes:
   afforded readonly or immutable response objects.
 
 - **Whereas PHP sends-as-it-goes, Response-Interop collects-then-sends.**
-  For example, the PHP sends a header at the moment the [`header()`][] function
+  For example, PHP sends a header at the moment the [`header()`][] function
   is called. In contrast, Response-Interop buffers the header specifications,
   and sends them only when the `sendResponse()` method is called.
 
@@ -118,7 +118,7 @@ difficult to resolve the differences between the projects. Given that the HTTP
 specifications indicate reason phrases are optional, Response-Interop does not
 attempt to resolve those differences.
 
-Implementors desiring a reason phrase are encouraged to add one approriate for
+Implementors desiring a reason phrase are encouraged to add one appropriate for
 the status code, perhaps in their `sendResponse()` logic.
 
 ### Why is _ResponseStruct_ not self-sending?
@@ -154,7 +154,7 @@ the concerns around building a response.
 ### Why does _ResponseHeadersCollection_ allow `string` but not _Stringable_ `$value` types?
 
 None of the researched projects do so. Further, doing so adds complexity to the
-implemetation directives on how to retain such values, as well to the return
+implementation directives on how to retain such values, as well as to the return
 typehints on the various getter methods. Avoiding _Stringable_ therefore reduces
 the implementation burden.
 
@@ -219,12 +219,12 @@ foreach ((array) $xFooValues as $xFooValue) {
 }
 ```
 
-With all that in mind, Response-Interop favors of the string-or-array approach.
+With all that in mind, Response-Interop favors the string-or-array approach.
 
 ### Why does _ResponseHeadersCollection_ provide no methods for managing header callbacks?
 
 PHP provides a [`header_register_callback()`][] function to execute callbacks
-when headers are sent. None the researched projects provided any equivalent
+when headers are sent. None of the researched projects provided any equivalent
 affordances.
 
 Implementors desiring something similar are encouraged to add such logic as
@@ -258,18 +258,18 @@ not specify affordances for other behaviors.
 ## Appendix: Relevant PHP Functions
 
 - Status line
-    - http://php.net/http_response_code
+    - https://php.net/http_response_code
 
 - Headers
-    - http://php.net/header
-    - http://php.net/header_register_callback
-    - http://php.net/header_remove
-    - http://php.net/headers_list
-    - http://php.net/headers_sent
+    - https://php.net/header
+    - https://php.net/header_register_callback
+    - https://php.net/header_remove
+    - https://php.net/headers_list
+    - https://php.net/headers_sent
 
 - Cookies
-    - http://php.net/setcookie
-    - http://php.net/setrawcookie
+    - https://php.net/setcookie
+    - https://php.net/setrawcookie
 
 * * *
 
