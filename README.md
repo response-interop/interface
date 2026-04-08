@@ -889,7 +889,7 @@ when headers are sent. None the researched projects provided any equivalent
 affordances.
 
 Implementors desiring something similar are encouraged to add such logic as
-necessary, perhaps in the `sendResponseHeaders()` logic.
+necessary, perhaps in the `sendResponse()` logic.
 
 ### Why does _ResponseHeadersCollection_ provide cookie affordance methods?
 

@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": ">=8.4"
     },
     "autoload": {
         "psr-4" : {
@@ -24,7 +24,9 @@
     "require-dev": {
         "pds/composer-script-names": "^1.0",
         "pds/skeleton": "^1.0",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.0",
+        "star-interop/stardoc": "1.x-dev",
+        "pmjones/php-styler": "0.x@dev"
     },
     "autoload-dev": {
         "psr-4" : {
@@ -33,6 +35,8 @@
     },
     "scripts": {
         "analyze": "./vendor/bin/phpstan",
-        "check": "composer analyze"
+        "check": "composer analyze && composer cs-fix",
+        "cs-check": "./vendor/bin/php-styler check --workers=auto",
+        "cs-fix": "./vendor/bin/php-styler apply --workers=auto"
     }
 }

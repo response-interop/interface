@@ -2,7 +2,7 @@
 
 ## 1.0.0-beta1
 
-Incororpated one chagne from private review:
+Incororpated one change from private review:
 
 - Extracted _ResponseBodySenderService_ from _ResponseBodySender_ to segregate
   the body-sending methods from the main sending method. _ResponseBodyHandler_
@@ -21,7 +21,8 @@ Incoporated changes indicated by private review:
 
 - Modified header field string validation notes.
 
-- Extracted _ResponseSenderService_
+- Extracted _ResponseSenderService_:
+
     - Removed `ResponseStruct::sendResponse()`
     - Removed `ResponseHeadersCollection::sendResponseHeaders()`
     - Removed _ResponseStatusLineStruct_, condensing its properties into _ResponseStruct_

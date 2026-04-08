@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace ResponseInterop\Interface;
 
-use Stringable;
-
 /**
  * [_ResponseSenderService_][] affords sending the response.
  *
