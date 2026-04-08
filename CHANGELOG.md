@@ -2,7 +2,7 @@
 
 ## 1.0.0-beta1
 
-Incororpated one change from private review:
+Incorporated one change from private review:
 
 - Extracted _ResponseBodySenderService_ from _ResponseBodySender_ to segregate
   the body-sending methods from the main sending method. _ResponseBodyHandler_
@@ -13,7 +13,7 @@ Incororpated one change from private review:
 
 ## 1.0.0-alpha1
 
-Incoporated changes indicated by private review:
+Incorporated changes indicated by private review:
 
 - Renamed _ResponseBodyContent_ to _ResponseBodyHandler_.
 

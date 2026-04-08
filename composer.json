@@ -1,8 +1,8 @@
 {
     "name": "response-interop/interface",
     "type": "library",
-    "description": "",
-    "keywords": [],
+    "description": "Interoperable server response interfaces for PHP.",
+    "keywords": ["response", "http", "interop", "interface"],
     "license": "MIT",
     "homepage": "https://github.com/response-interop/interface",
     "authors": [
@@ -28,14 +28,9 @@
         "star-interop/stardoc": "1.x-dev",
         "pmjones/php-styler": "0.x@dev"
     },
-    "autoload-dev": {
-        "psr-4" : {
-            "ResponseInterop\\Interface\\": "tests/"
-        }
-    },
     "scripts": {
         "analyze": "./vendor/bin/phpstan",
-        "check": "composer analyze && composer cs-fix",
+        "check": "composer analyze && composer cs-check",
         "cs-check": "./vendor/bin/php-styler check --workers=auto",
         "cs-fix": "./vendor/bin/php-styler apply --workers=auto"
     }

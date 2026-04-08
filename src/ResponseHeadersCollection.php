@@ -120,7 +120,7 @@ interface ResponseHeadersCollection
      * - Notes:
      *
      *     - **This method returns a string if there is only one value.**
-     *       This is to support the most common  case for most response
+     *       This is to support the most common case for most response
      *       headers; i.e., a single value. This reduces the occurrence of
      *       the idiom `getHeader('field-name')[0]`. If consumers require the
      *       return to be an array regardless of the number of values, they

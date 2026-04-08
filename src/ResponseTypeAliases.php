@@ -76,7 +76,7 @@ namespace ResponseInterop\Interface;
  *
  * @phpstan-type response_cookie_array array{
  *     name: response_cookie_name_string,
- *     value: response_header_value_string,
+ *     value: response_cookie_value_string,
  *     attributes: response_cookie_attributes_array
  * }
  *

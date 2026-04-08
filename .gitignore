@@ -1,5 +1,3 @@
-/.php-styler.cache
-/.phpunit.cache
 /composer.lock
 /tmp
 /vendor
