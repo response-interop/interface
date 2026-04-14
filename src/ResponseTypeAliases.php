@@ -89,6 +89,7 @@ namespace ResponseInterop\Interface;
  *     httponly?:true,
  *     samesite?:string,
  *     partitioned?:true,
+ *     ...<string, string|true>
  * }
  *
  * @phpstan-type response_cookie_name_string string
