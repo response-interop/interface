@@ -59,7 +59,7 @@ interface ResponseBodySenderService
      *
      *     - **The method signature is subtly different from related streaming
      *       functions in PHP.** Whereas [`stream_copy_to_stream()`][] defaults
-     *       to `$offset = 0`, and [`stream_get_contents()`] defaults to
+     *       to `$offset = 0`, and [`stream_get_contents()`][] defaults to
      *       `-1`, the default here is `null`.
      *
      *     - **By default, do not move the starting pointer position.** Some

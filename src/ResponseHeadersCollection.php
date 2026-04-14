@@ -132,6 +132,7 @@ interface ResponseHeadersCollection
      *       practical terms, the implementation should use
      *       `getCookiesAsStrings()` as the source for `set-cookie` values.
      *
+     * @param response_header_field_string $field
      * @return null|response_header_value_string|response_header_value_string[]
      */
     public function getHeader(string $field) : null|string|array;

@@ -51,13 +51,13 @@ interface ResponseBodyHandler
      *
      * - Directives:
      *
-     *     - Implementations MUST send the body content using the `$sender`.
+     *     - Implementations MUST send the body content using the `$bodySender`.
      *
      * - Notes:
      *
-     *     - **Send the body via the `$sender`, not by using `echo` or some
+     *     - **Send the body via the `$bodySender`, not by using `echo` or some
      *       other means.** This allows the sending logic to specify the output
-     *       destination. The `$sender` provides affordances for sending strings
+     *       destination. The `$bodySender` provides affordances for sending strings
      *       and resources (whether in whole or in part).
      */
     public function sendResponseBody(ResponseBodySenderService $bodySender) : void;

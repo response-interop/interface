@@ -167,7 +167,7 @@ including affordances for cookie management.
 
 - ```php
   public function getHeader(
-      string $field,
+      response_header_field_string $field,
   ) : null|response_header_value_string|response_header_value_string[];
   ```
     - Returns the `$value`(s) for a header.
@@ -391,13 +391,13 @@ resource-intensive, or header-modifying content.
 
     - Directives:
 
-        - Implementations MUST send the body content using the `$sender`.
+        - Implementations MUST send the body content using the `$bodySender`.
 
     - Notes:
 
-        - **Send the body via the `$sender`, not by using `echo` or some
+        - **Send the body via the `$bodySender`, not by using `echo` or some
           other means.** This allows the sending logic to specify the output
-          destination. The `$sender` provides affordances for sending strings
+          destination. The `$bodySender` provides affordances for sending strings
           and resources (whether in whole or in part).
 
 ### _ResponseCookieHelperService_
@@ -585,7 +585,7 @@ It does so in two ways, allowing conversion between two representations:
 
         - **The method signature is subtly different from related streaming
           functions in PHP.** Whereas [`stream_copy_to_stream()`][] defaults
-          to `$offset = 0`, and [`stream_get_contents()`] defaults to
+          to `$offset = 0`, and [`stream_get_contents()`][] defaults to
           `-1`, the default here is `null`.
 
         - **By default, do not move the starting pointer position.** Some
