@@ -21,10 +21,10 @@ interface ResponseBodySenderService
      *
      * - Notes:
      *
-     *     - **Prefer writing to a resource over calling `echo`, `print`,
+     *     - **Prefer writing to a resource over calling [`echo`][], [`print`][],
      *       etc.** Although echoing a body string is the single most common
-     *       use case, calling `fwrite()` with a `php://output` resource does
-     *       exactly the same thing. This also allows specifying the output
+     *       use case, calling [`fwrite()`][] with a `php://output` resource
+     *       does exactly the same thing. This also allows specifying the output
      *       destination at call-time, such as when testing.
      */
     public function sendResponseBodyString(string|Stringable $content) : void;
@@ -34,22 +34,29 @@ interface ResponseBodySenderService
      *
      * - Directives:
      *
-     *     - Implementations SHOULD send the `$content` to the `php://output`
+     *     - Implementations SHOULD write the `$content` to the `php://output`
      *       stream, but MAY use some other mechanism or destination.
+     *
+     *     - If the `$length` is `null` or zero, implementations MUST send all
+     *       remaining bytes from the `$content`.
+     *
+     *     - If the `$length` is positive, implementations MUST send that many
+     *       bytes from the `$content` (or all remaining bytes from the
+     *       `$content`, whichever comes first).
+     *
+     *     - If the `$length` is negative, implementations MUST throw a
+     *       [_ResponseThrowable_][].
      *
      *     - If the `$offset` is `null`, implementations MUST begin reading
      *       from the current `$content` pointer position.
      *
      *     - If the `$offset` is zero or positive, implementations MUST begin
-     *       reading from the `$content` starting at that byte; implementations
-     *       MAY move the pointer as needed, e.g. via [`fseek()`][].
+     *       reading from the `$content` starting at the `$offset` byte;
+     *       implementations MAY move the pointer as needed, e.g. by calling
+     *       [`fseek()`][].
      *
-     *     - If the `$length` is `null`, implementations MUST send all remaining
-     *       bytes from the `$content`.
-     *
-     *     - If the `$length` is not `null`, implementations MUST send that many
-     *       bytes from the `$content` (or all remaining bytes from the `$content`,
-     *       whichever comes first).
+     *     - If the `$offset` is negative, implementations MUST throw a
+     *       [_ResponseThrowable_][].
      *
      *     - Implementations MUST return the number of bytes sent.
      *

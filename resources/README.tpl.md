@@ -283,10 +283,12 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #responsethrowable
 [_ResponseTypeAliases_]: #responsetypealiases
 [_Throwable_]: https://php.net/Throwable
+[`echo`]: https://php.net/echo
 [`flush()`]: https://php.net/flush
 [`fseek()`]: https://php.net/fseek
 [`fwrite()`]: https://php.net/fwrite
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`print`]: https://php.net/print
 [`rewind()`]: https://php.net/rewind
 [`stream_get_contents()`]: https://php.net/stream_get_contents
 [`stream_copy_to_stream()`]: https://php.net/stream_copy_to_stream
@@ -298,3 +300,5 @@ not specify affordances for other behaviors.
 [RFC 2119]: https://datatracker.ietf.org/doc/html/rfc2119
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265
 [RFC 8174]: https://datatracker.ietf.org/doc/html/rfc8174
+[RFC 9110]: https://datatracker.ietf.org/doc/html/rfc9110
+[IANA HTTP Status Code Registry]: https://www.iana.org/assignments/http-status-codes

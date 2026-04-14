@@ -56,6 +56,12 @@ Notes:
         - Implementations MAY validate this value; implementations doing
           so MUST throw a [_ResponseThrowable_][] on invalidity.
 
+    - Notes:
+
+        - **Valid HTTP version strings may be updated from time to time.**
+          Consult the relevant authoritative source documents, such as
+          [RFC 9110][] section 2.5.
+
 - ```php
   public response_status_code_int $statusCode { get; set; }
   ```
@@ -65,6 +71,12 @@ Notes:
 
         - Implementations MAY validate this value; implementations doing
           so MUST throw a [_ResponseThrowable_][] on invalidity.
+
+    - Notes:
+
+        - **Valid status codes may be updated from time to time.** Consult
+          the relevant authoritative source documents, such as the
+          [IANA HTTP Status Code Registry][].
 
 - ```php
   public ResponseHeadersCollection $headers { get; set; }
@@ -165,6 +177,12 @@ including affordances for cookie management.
   ```
     - Reports if a header exists.
 
+    - Directives:
+
+        - If the normalized `$field` is `set-cookie`, implementations MUST
+          return `true` when any cookies exist, regardless of whether
+          they were set via `setHeader()`, `addHeader()`, or `setCookie()`.
+
 - ```php
   public function getHeader(
       response_header_field_string $field,
@@ -203,10 +221,21 @@ including affordances for cookie management.
   ```
     - Removes a header entirely.
 
+    - Directives:
+
+        - If the normalized `$field` is `set-cookie`, implementations MUST
+          also remove all cookies, as if `unsetCookies()` had been called.
+
 - ```php
   public function hasHeaders() : bool;
   ```
     - Reports if any headers exist.
+
+    - Directives:
+
+        - Implementations MUST return `true` when any cookies exist,
+          regardless of whether they were set via `setHeader()`,
+          `addHeader()`, or `setCookie()`.
 
 - ```php
   public function getHeaders() : response_headers_array;
@@ -234,6 +263,11 @@ including affordances for cookie management.
   public function unsetHeaders() : void;
   ```
     - Removes all headers.
+
+    - Directives:
+
+        - Implementations MUST also remove all cookies, as if
+          `unsetCookies()` had been called.
 
 - ```php
   public function setCookie(
@@ -525,6 +559,16 @@ It does so in two ways, allowing conversion between two representations:
         - Implementations MAY "finish" or "close" the request after sending
           the response.
 
+    - Notes:
+
+        - **Prefer writing a `string` or `Stringable` body to a resource
+          over calling [`echo`][], [`print`][], etc.** For example, calling
+          [`fwrite()`][] with a `php://output` resource does exactly the
+          same thing as [`echo`][] but also allows specifying the output
+          destination at call-time, such as when testing. Consider using the
+          [_ResponseBodySenderService_][] method `sendResponseBodyString()`
+          for this purpose.
+
 ### _ResponseBodySenderService_
 
 [_ResponseBodySenderService_][] affords sending the response body.
@@ -543,10 +587,10 @@ It does so in two ways, allowing conversion between two representations:
 
     - Notes:
 
-        - **Prefer writing to a resource over calling `echo`, `print`,
+        - **Prefer writing to a resource over calling [`echo`][], [`print`][],
           etc.** Although echoing a body string is the single most common
-          use case, calling `fwrite()` with a `php://output` resource does
-          exactly the same thing. This also allows specifying the output
+          use case, calling [`fwrite()`][] with a `php://output` resource
+          does exactly the same thing. This also allows specifying the output
           destination at call-time, such as when testing.
 
 - ```php
@@ -560,22 +604,29 @@ It does so in two ways, allowing conversion between two representations:
 
     - Directives:
 
-        - Implementations SHOULD send the `$content` to the `php://output`
+        - Implementations SHOULD write the `$content` to the `php://output`
           stream, but MAY use some other mechanism or destination.
+
+        - If the `$length` is `null` or zero, implementations MUST send all
+          remaining bytes from the `$content`.
+
+        - If the `$length` is positive, implementations MUST send that many
+          bytes from the `$content` (or all remaining bytes from the
+          `$content`, whichever comes first).
+
+        - If the `$length` is negative, implementations MUST throw a
+          [_ResponseThrowable_][].
 
         - If the `$offset` is `null`, implementations MUST begin reading
           from the current `$content` pointer position.
 
         - If the `$offset` is zero or positive, implementations MUST begin
-          reading from the `$content` starting at that byte; implementations
-          MAY move the pointer as needed, e.g. via [`fseek()`][].
+          reading from the `$content` starting at the `$offset` byte;
+          implementations MAY move the pointer as needed, e.g. by calling
+          [`fseek()`][].
 
-        - If the `$length` is `null`, implementations MUST send all remaining
-          bytes from the `$content`.
-
-        - If the `$length` is not `null`, implementations MUST send that many
-          bytes from the `$content` (or all remaining bytes from the `$content`,
-          whichever comes first).
+        - If the `$offset` is negative, implementations MUST throw a
+          [_ResponseThrowable_][].
 
         - Implementations MUST return the number of bytes sent.
 
@@ -642,6 +693,7 @@ analysis.
       httponly?:true,
       samesite?:string,
       partitioned?:true,
+      ...<string, string|true>
   }
   ```
     - An `array` intended to specify cookie attributes.
@@ -944,10 +996,12 @@ not specify affordances for other behaviors.
 [_ResponseThrowable_]: #responsethrowable
 [_ResponseTypeAliases_]: #responsetypealiases
 [_Throwable_]: https://php.net/Throwable
+[`echo`]: https://php.net/echo
 [`flush()`]: https://php.net/flush
 [`fseek()`]: https://php.net/fseek
 [`fwrite()`]: https://php.net/fwrite
 [`header_register_callback()`]: https://php.net/header_register_callback
+[`print`]: https://php.net/print
 [`rewind()`]: https://php.net/rewind
 [`stream_get_contents()`]: https://php.net/stream_get_contents
 [`stream_copy_to_stream()`]: https://php.net/stream_copy_to_stream
@@ -959,3 +1013,5 @@ not specify affordances for other behaviors.
 [RFC 2119]: https://datatracker.ietf.org/doc/html/rfc2119
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265
 [RFC 8174]: https://datatracker.ietf.org/doc/html/rfc8174
+[RFC 9110]: https://datatracker.ietf.org/doc/html/rfc9110
+[IANA HTTP Status Code Registry]: https://www.iana.org/assignments/http-status-codes

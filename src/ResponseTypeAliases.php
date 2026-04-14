@@ -26,6 +26,7 @@ namespace ResponseInterop\Interface;
  *       httponly?:true,
  *       samesite?:string,
  *       partitioned?:true,
+ *       ...<string, string|true>
  *   }
  *   ```
  *     - An `array` intended to specify cookie attributes.

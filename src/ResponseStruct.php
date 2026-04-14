@@ -21,6 +21,12 @@ interface ResponseStruct
      *     - Implementations MAY validate this value; implementations doing
      *       so MUST throw a [_ResponseThrowable_][] on invalidity.
      *
+     * - Notes:
+     *
+     *     - **Valid HTTP version strings may be updated from time to time.**
+     *       Consult the relevant authoritative source documents, such as
+     *       [RFC 9110][] section 2.5.
+     *
      * @var response_http_version_string
      */
     public string $httpVersion { get; set; }
@@ -32,6 +38,12 @@ interface ResponseStruct
      *
      *     - Implementations MAY validate this value; implementations doing
      *       so MUST throw a [_ResponseThrowable_][] on invalidity.
+     *
+     * - Notes:
+     *
+     *     - **Valid status codes may be updated from time to time.** Consult
+     *       the relevant authoritative source documents, such as the
+     *       [IANA HTTP Status Code Registry][].
      *
      * @var response_status_code_int
      */

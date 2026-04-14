@@ -30,6 +30,16 @@ interface ResponseSenderService
      *
      *     - Implementations MAY "finish" or "close" the request after sending
      *       the response.
+     *
+     * - Notes:
+     *
+     *     - **Prefer writing a `string` or `Stringable` body to a resource
+     *       over calling [`echo`][], [`print`][], etc.** For example, calling
+     *       [`fwrite()`][] with a `php://output` resource does exactly the
+     *       same thing as [`echo`][] but also allows specifying the output
+     *       destination at call-time, such as when testing. Consider using the
+     *       [_ResponseBodySenderService_][] method `sendResponseBodyString()`
+     *       for this purpose.
      */
     public function sendResponse(ResponseStruct $response) : void;
 }

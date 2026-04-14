@@ -99,6 +99,12 @@ interface ResponseHeadersCollection
     /**
      * Reports if a header exists.
      *
+     * - Directives:
+     *
+     *     - If the normalized `$field` is `set-cookie`, implementations MUST
+     *       return `true` when any cookies exist, regardless of whether
+     *       they were set via `setHeader()`, `addHeader()`, or `setCookie()`.
+     *
      * @param response_header_field_string $field
      */
     public function hasHeader(string $field) : bool;
@@ -140,12 +146,23 @@ interface ResponseHeadersCollection
     /**
      * Removes a header entirely.
      *
+     * - Directives:
+     *
+     *     - If the normalized `$field` is `set-cookie`, implementations MUST
+     *       also remove all cookies, as if `unsetCookies()` had been called.
+     *
      * @param response_header_field_string $field
      */
     public function unsetHeader(string $field) : void;
 
     /**
      * Reports if any headers exist.
+     *
+     * - Directives:
+     *
+     *     - Implementations MUST return `true` when any cookies exist,
+     *       regardless of whether they were set via `setHeader()`,
+     *       `addHeader()`, or `setCookie()`.
      */
     public function hasHeaders() : bool;
 
@@ -175,6 +192,11 @@ interface ResponseHeadersCollection
 
     /**
      * Removes all headers.
+     *
+     * - Directives:
+     *
+     *     - Implementations MUST also remove all cookies, as if
+     *       `unsetCookies()` had been called.
      */
     public function unsetHeaders() : void;
 
