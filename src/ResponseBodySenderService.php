@@ -37,10 +37,10 @@ interface ResponseBodySenderService
      *     - Implementations SHOULD write the `$content` to the `php://output`
      *       stream, but MAY use some other mechanism or destination.
      *
-     *     - If the `$length` is `null` or zero, implementations MUST send all
+     *     - If the `$length` is `null`, implementations MUST send all
      *       remaining bytes from the `$content`.
      *
-     *     - If the `$length` is positive, implementations MUST send that many
+     *     - If the `$length` is zero or positive, implementations MUST send that many
      *       bytes from the `$content` (or all remaining bytes from the
      *       `$content`, whichever comes first).
      *
@@ -51,9 +51,7 @@ interface ResponseBodySenderService
      *       from the current `$content` pointer position.
      *
      *     - If the `$offset` is zero or positive, implementations MUST begin
-     *       reading from the `$content` starting at the `$offset` byte;
-     *       implementations MAY move the pointer as needed, e.g. by calling
-     *       [`fseek()`][].
+     *       reading from the `$content` starting at the `$offset` byte.
      *
      *     - If the `$offset` is negative, implementations MUST throw a
      *       [_ResponseThrowable_][].

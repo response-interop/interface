@@ -62,10 +62,11 @@ interface ResponseHeadersCollection
      * - Directives:
      *
      *     - If the normalized `$field` is `set-cookie`, implementations MUST
-     *       retain the `$value` such that the cookie can be retrieved by
-     *       name (e.g. via `getCookieAsArray()` or `getCookieAsString()`);
-     *       if the cookie cannot be retained in such a way, implementations
-     *       MUST throw a [_ResponseThrowable_][].
+     *       remove all pre-existing cookies, and MUST retain the `$value`
+     *       such that the cookie can be retrieved by name (e.g. via
+     *       `getCookieAsArray()` or `getCookieAsString()`); if the cookie
+     *       cannot be retained in such a way, implementations MUST throw a
+     *       [_ResponseThrowable_][].
      *
      * @param response_header_field_string $field
      * @param response_header_value_string $value
@@ -309,7 +310,12 @@ interface ResponseHeadersCollection
     public function getCookiesAsStrings() : array;
 
     /**
-     * Removes the `set-cookie` header entirely.
+     * Removes all cookies.
+     *
+     * - Directives:
+     *
+     *     - Implementations MUST behave as if `unsetHeader('set-cookie')`
+     *       had been called.
      *
      * - Notes:
      *
