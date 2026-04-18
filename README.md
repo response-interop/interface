@@ -225,7 +225,7 @@ including affordances for cookie management.
     - Directives:
 
         - If the normalized `$field` is `set-cookie`, implementations MUST
-          also remove all cookies, as if `unsetCookies()` had been called.
+          also remove all cookies.
 
 - ```php
   public function hasHeaders() : bool;
@@ -267,8 +267,7 @@ including affordances for cookie management.
 
     - Directives:
 
-        - Implementations MUST also remove all cookies, as if
-          `unsetCookies()` had been called.
+        - Implementations MUST also remove all cookies.
 
 - ```php
   public function setCookie(
@@ -713,7 +712,7 @@ analysis.
       first argument to [`header()`][].
 
 - `response_header_value_string`
-    - A `string` intended to be header value, typically as part of the first
+    - A `string` intended to be a header value, typically as part of the first
       argument to [`header()`][].
 
 - ```

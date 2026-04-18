@@ -150,7 +150,7 @@ interface ResponseHeadersCollection
      * - Directives:
      *
      *     - If the normalized `$field` is `set-cookie`, implementations MUST
-     *       also remove all cookies, as if `unsetCookies()` had been called.
+     *       also remove all cookies.
      *
      * @param response_header_field_string $field
      */
@@ -196,8 +196,7 @@ interface ResponseHeadersCollection
      *
      * - Directives:
      *
-     *     - Implementations MUST also remove all cookies, as if
-     *       `unsetCookies()` had been called.
+     *     - Implementations MUST also remove all cookies.
      */
     public function unsetHeaders() : void;
 

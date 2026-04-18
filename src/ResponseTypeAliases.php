@@ -42,7 +42,7 @@ namespace ResponseInterop\Interface;
  *       first argument to [`header()`][].
  *
  * - `response_header_value_string`
- *     - A `string` intended to be header value, typically as part of the first
+ *     - A `string` intended to be a header value, typically as part of the first
  *       argument to [`header()`][].
  *
  * - ```
