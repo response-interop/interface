@@ -7,6 +7,9 @@ namespace ResponseInterop\Interface;
  * [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static
  * analysis.
  *
+ * This interface is not intended to be implemented. It exists only to
+ * carry PHPStan type aliases for import via `@phpstan-import-type`.
+ *
  * - ```
  *   response_cookie_array array{
  *       name: response_cookie_name_string,

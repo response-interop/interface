@@ -7,7 +7,6 @@ use Stringable;
 
 /**
  * [_ResponseBodySenderService_][] affords sending the response body.
- *
  */
 interface ResponseBodySenderService
 {

@@ -5,7 +5,6 @@ namespace ResponseInterop\Interface;
 
 /**
  * [_ResponseSenderService_][] affords sending the response.
- *
  */
 interface ResponseSenderService
 {

@@ -690,6 +690,9 @@ It adds no class members.
 [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static
 analysis.
 
+This interface is not intended to be implemented. It exists only to
+carry PHPStan type aliases for import via `@phpstan-import-type`.
+
 - ```
   response_cookie_array array{
       name: response_cookie_name_string,
@@ -910,7 +913,7 @@ if (
 ```
 
 That is, the consumer cannot be guaranteed that the `location` exists at all
-as an array, nor that is has only one value if it does, nor that the only array
+as an array, nor that it has only one value if it does, nor that the only array
 key is `0`.
 
 What about an always-string idiom? If there were multiple values, they would
@@ -1014,7 +1017,6 @@ not specify affordances for other behaviors.
 [_Throwable_]: https://php.net/Throwable
 [`echo`]: https://php.net/echo
 [`flush()`]: https://php.net/flush
-[`fseek()`]: https://php.net/fseek
 [`fwrite()`]: https://php.net/fwrite
 [`header_register_callback()`]: https://php.net/header_register_callback
 [`print`]: https://php.net/print
