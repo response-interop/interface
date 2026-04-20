@@ -34,6 +34,14 @@ namespace ResponseInterop\Interface;
  *     - **Header values cannot be blank.** If `trim($value) === ''` then
  *       the `$value` is blank.
  *
+ *     - **Cookies and `set-cookie` headers are kept synchronized.** All
+ *       cookies set via `setHeader('set-cookie', ...)`,
+ *       `addHeader('set-cookie', ...)`, or `setCookie()` are visible to
+ *       all header-access methods: `hasHeader('set-cookie')` and
+ *       `hasHeaders()` return `true` whenever any cookies exist, and
+ *       `getHeader('set-cookie')` and `getHeaders()` return cookie
+ *       values via `getCookiesAsStrings()`.
+ *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
  *
  * @phpstan-import-type response_cookie_attributes_array from ResponseTypeAliases
@@ -103,8 +111,7 @@ interface ResponseHeadersCollection
      * - Directives:
      *
      *     - If the normalized `$field` is `set-cookie`, implementations MUST
-     *       return `true` when any cookies exist, regardless of whether
-     *       they were set via `setHeader()`, `addHeader()`, or `setCookie()`.
+     *       return `true` when any cookies exist.
      *
      * @param response_header_field_string $field
      */
@@ -123,6 +130,9 @@ interface ResponseHeadersCollection
      *
      *     - Implementations MUST return an array of strings if there is more
      *       than one `$value` for the header.
+     *
+     *     - If the normalized `$field` is `set-cookie`, implementations MUST
+     *       return cookie values as returned by `getCookiesAsStrings()`.
      *
      * - Notes:
      *
@@ -157,13 +167,7 @@ interface ResponseHeadersCollection
     public function unsetHeader(string $field) : void;
 
     /**
-     * Reports if any headers exist.
-     *
-     * - Directives:
-     *
-     *     - Implementations MUST return `true` when any cookies exist,
-     *       regardless of whether they were set via `setHeader()`,
-     *       `addHeader()`, or `setCookie()`.
+     * Reports if any headers or cookies exist.
      */
     public function hasHeaders() : bool;
 
@@ -178,6 +182,9 @@ interface ResponseHeadersCollection
      *
      *     - Implementations MUST use an array of strings if there is more
      *       than one `$value` for a header.
+     *
+     *     - When any cookies exist, the returned array MUST include a
+     *       `set-cookie` key whose value is from `getCookiesAsStrings()`.
      *
      * - Notes:
      *

@@ -129,6 +129,14 @@ including affordances for cookie management.
     - **Header values cannot be blank.** If `trim($value) === ''` then
       the `$value` is blank.
 
+    - **Cookies and `set-cookie` headers are kept synchronized.** All
+      cookies set via `setHeader('set-cookie', ...)`,
+      `addHeader('set-cookie', ...)`, or `setCookie()` are visible to
+      all header-access methods: `hasHeader('set-cookie')` and
+      `hasHeaders()` return `true` whenever any cookies exist, and
+      `getHeader('set-cookie')` and `getHeaders()` return cookie
+      values via `getCookiesAsStrings()`.
+
 #### _ResponseHeadersCollection_ Methods
 
 - ```php
@@ -181,8 +189,7 @@ including affordances for cookie management.
     - Directives:
 
         - If the normalized `$field` is `set-cookie`, implementations MUST
-          return `true` when any cookies exist, regardless of whether
-          they were set via `setHeader()`, `addHeader()`, or `setCookie()`.
+          return `true` when any cookies exist.
 
 - ```php
   public function getHeader(
@@ -201,6 +208,9 @@ including affordances for cookie management.
 
         - Implementations MUST return an array of strings if there is more
           than one `$value` for the header.
+
+        - If the normalized `$field` is `set-cookie`, implementations MUST
+          return cookie values as returned by `getCookiesAsStrings()`.
 
     - Notes:
 
@@ -230,13 +240,7 @@ including affordances for cookie management.
 - ```php
   public function hasHeaders() : bool;
   ```
-    - Reports if any headers exist.
-
-    - Directives:
-
-        - Implementations MUST return `true` when any cookies exist,
-          regardless of whether they were set via `setHeader()`,
-          `addHeader()`, or `setCookie()`.
+    - Reports if any headers or cookies exist.
 
 - ```php
   public function getHeaders() : response_headers_array;
@@ -251,6 +255,9 @@ including affordances for cookie management.
 
         - Implementations MUST use an array of strings if there is more
           than one `$value` for a header.
+
+        - When any cookies exist, the returned array MUST include a
+          `set-cookie` key whose value is from `getCookiesAsStrings()`.
 
     - Notes:
 
