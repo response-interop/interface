@@ -42,6 +42,12 @@ namespace ResponseInterop\Interface;
  *       `getHeader('set-cookie')` and `getHeaders()` return cookie
  *       values via `getCookiesAsStrings()`.
  *
+ *     - **Boolean-flag cookie attributes are specified by presence.**
+ *       Attributes that carry no value (e.g. `secure`, `httponly`,
+ *       `partitioned`) are represented as boolean `true` when on, and are
+ *       absent from the `$attributes` array when off. The type
+ *       `response_cookie_attributes_array` does not permit a `false` value.
+ *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
  *
  * @phpstan-import-type response_cookie_attributes_array from ResponseTypeAliases
