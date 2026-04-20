@@ -1,5 +1,20 @@
 # Change Log
 
+## NEXT
+
+Incorporated clarifications from private review:
+
+- Clarified that cookies and `set-cookie` headers are kept synchronized
+  across `setHeader()`, `addHeader()`, `setCookie()`, and the
+  header-access methods.
+
+- Opened `response_cookie_attributes_array` to permit additional string
+  attributes such as `SameSite` and `Partitioned`.
+
+- Documented boolean-flag cookie attributes as specified-by-presence.
+
+- Documentation, typo, and tooling refinements.
+
 ## 1.0.0-beta1
 
 Incorporated one change from private review:
