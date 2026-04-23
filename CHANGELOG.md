@@ -1,17 +1,25 @@
 # Change Log
 
-## NEXT
+## 1.0.0-beta2
 
-Incorporated clarifications from private review:
+Incorporated clarifications from public and private review:
 
-- Clarified that cookies and `set-cookie` headers are kept synchronized
-  across `setHeader()`, `addHeader()`, `setCookie()`, and the
-  header-access methods.
+- Clarified that cookies and `set-cookie` headers are kept synchronized.
 
 - Opened `response_cookie_attributes_array` to permit additional string
   attributes such as `SameSite` and `Partitioned`.
 
 - Documented boolean-flag cookie attributes as specified-by-presence.
+
+- Added throw-on-negative directives for `$length` and `$offset` in
+  `ResponseBodySenderService::sendResponseBodyResource()`; clarified
+  `$length` of zero means send zero bytes.
+
+- Added a note in `sendResponse()` preferring stream-based output via
+  `sendResponseBodyString()` over `echo`/`print`.
+
+- Narrowed `response_cookie_array` `value` type from
+  `response_header_value_string` to `response_cookie_value_string`.
 
 - Documentation, typo, and tooling refinements.
 
