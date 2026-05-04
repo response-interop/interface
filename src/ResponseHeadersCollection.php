@@ -49,23 +49,14 @@ namespace ResponseInterop\Interface;
  *       `response_cookie_attributes_array` does not permit a `false` value.
  *
  * @phpstan-import-type response_cookie_array from ResponseTypeAliases
- *
  * @phpstan-import-type response_cookie_attributes_array from ResponseTypeAliases
- *
  * @phpstan-import-type response_cookie_name_string from ResponseTypeAliases
- *
  * @phpstan-import-type response_cookie_value_string from ResponseTypeAliases
- *
  * @phpstan-import-type response_header_field_string from ResponseTypeAliases
- *
  * @phpstan-import-type response_header_value_string from ResponseTypeAliases
- *
  * @phpstan-import-type response_headers_array from ResponseTypeAliases
- *
  * @phpstan-import-type response_named_cookie_arrays from ResponseTypeAliases
- *
  * @phpstan-import-type response_named_cookie_strings from ResponseTypeAliases
- *
  */
 interface ResponseHeadersCollection
 {

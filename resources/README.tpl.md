@@ -1,14 +1,20 @@
-# Response-Interop Interface Package
+# Response-Interop Standard Interface Package
 
-Response-Interop provides an interoperable package of standard interfaces to
-encapsulate, buffer, and send server-side response values in PHP 8.4 or later,
-in order to reduce the global mutable state and inspection problems that exist
-with the PHP response-sending functions. It reflects, refines, and reconciles
-the common practices identified within [several pre-existing projects](./README-RESEARCH.md).
+[![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
+[![PDS Composer Script Names](https://img.shields.io/badge/pds-composer--script--names-blue?style=flat-square)](https://github.com/php-pds/composer-script-names)
+
+Response-Interop provides an interoperable package of standard interfaces for
+encapsulating, buffering, and sending server-side response values in PHP 8.4 or
+later, in order to reduce the global mutable state and inspection problems that
+exist with the PHP response-sending functions. It reflects, refines, and
+reconciles the common practices identified within
+[several pre-existing projects](./README-RESEARCH.md).
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [BCP 14][] ([RFC 2119][], [RFC 8174][]).
+
+This package attempts to adhere to the [Package Development Standards](https://php-pds.com/) approach to [naming and versioning](https://php-pds.com/#naming-and-versioning).
 
 ## Interfaces
 
@@ -30,14 +36,11 @@ Notes:
 
 ## Implementations
 
-- Directives:
+Implementations MAY define additional class members not defined in these interfaces.
 
-    - Implementations MAY define additional class members not defined in these
-      interfaces.
+Notes:
 
-- Notes:
-
-    - **Reference implementations** may be found at <https://github.com/response-interop/impl>.
+- **Reference implementations** are available at <https://github.com/response-interop/impl>.
 
 ## Q & A
 
@@ -295,7 +298,7 @@ not specify affordances for other behaviors.
 [`setcookie()`]: https://php.net/setcookie
 [`urldecode()`]: https://php.net/urldecode
 [`urlencode()`]: https://php.net/urlencode
-[BCP 14]: https://www.rfc-editor.org/info/bcp14
+[BCP 14]: https://datatracker.ietf.org/doc/bcp14/
 [RFC 2119]: https://datatracker.ietf.org/doc/html/rfc2119
 [RFC 6265]: https://datatracker.ietf.org/doc/html/rfc6265
 [RFC 8174]: https://datatracker.ietf.org/doc/html/rfc8174

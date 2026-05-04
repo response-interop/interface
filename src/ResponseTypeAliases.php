@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace ResponseInterop\Interface;
 
 /**
- * [_ResponseTypeAliases_][] provides PHPStan type aliases to aid static
- * analysis.
- *
- * This interface is not intended to be implemented. It exists only to
- * carry PHPStan type aliases for import via `@phpstan-import-type`.
+ * [_ResponseTypeAliases_][] provides custom PHPStan types to aid static analysis.
  *
  * - ```
  *   response_cookie_array array{
@@ -122,7 +118,6 @@ namespace ResponseInterop\Interface;
  * >
  *
  * @phpstan-type response_status_code_int int
- *
  */
 interface ResponseTypeAliases
 {
