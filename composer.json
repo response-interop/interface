@@ -30,8 +30,9 @@
     },
     "scripts": {
         "analyze": "./vendor/bin/phpstan",
-        "check": "composer analyze && composer cs-check",
-        "cs-check": "./vendor/bin/php-styler check --workers=auto",
-        "cs-fix": "./vendor/bin/php-styler apply --workers=auto"
+        "check": "composer analyze && composer cs-clear && composer cs-check",
+        "cs-check": "./vendor/bin/php-styler check",
+        "cs-clear": "./vendor/bin/php-styler clear-cache",
+        "cs-fix": "./vendor/bin/php-styler apply"
     }
 }
