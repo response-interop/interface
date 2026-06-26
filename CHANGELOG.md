@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.0
+
+First stable release.
+
 ## 1.0.0-beta2
 
 Incorporated clarifications from public and private review:

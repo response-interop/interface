@@ -42,6 +42,12 @@ namespace ResponseInterop\Interface;
  *       `getHeader('set-cookie')` and `getHeaders()` return cookie
  *       values via `getCookiesAsStrings()`.
  *
+ *     - **Multiple `set-cookie` values are keyed by cookie name, not by
+ *       position.** Every other multi-valued header comes back as a
+ *       positional list, but `getHeader('set-cookie')` and
+ *       `getHeaders()['set-cookie']` preserve the cookie-name keys from
+ *       `getCookiesAsStrings()`.
+ *
  *     - **Boolean-flag cookie attributes are specified by presence.**
  *       Attributes that carry no value (e.g. `secure`, `httponly`,
  *       `partitioned`) are represented as boolean `true` when on, and are
@@ -129,7 +135,8 @@ interface ResponseHeadersCollection
      *       than one `$value` for the header.
      *
      *     - If the normalized `$field` is `set-cookie`, implementations MUST
-     *       return cookie values as returned by `getCookiesAsStrings()`.
+     *       use the cookie values provided by `getCookiesAsStrings()`, keyed
+     *       by cookie name when more than one cookie exists.
      *
      * - Notes:
      *
@@ -181,7 +188,9 @@ interface ResponseHeadersCollection
      *       than one `$value` for a header.
      *
      *     - When any cookies exist, the returned array MUST include a
-     *       `set-cookie` key whose value is from `getCookiesAsStrings()`.
+     *       `set-cookie` key, using the cookie values provided by
+     *       `getCookiesAsStrings()`, keyed by cookie name when more than one
+     *       cookie exists.
      *
      * - Notes:
      *
