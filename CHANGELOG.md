@@ -4,6 +4,12 @@
 
 First stable release.
 
+- Clarified that multiple `set-cookie` values are keyed by cookie name
+  rather than by position, in both `getHeader('set-cookie')` and
+  `getHeaders()`, matching the keys returned by `getCookiesAsStrings()`.
+
+- Documentation and tooling refinements.
+
 ## 1.0.0-beta2
 
 Incorporated clarifications from public and private review:
